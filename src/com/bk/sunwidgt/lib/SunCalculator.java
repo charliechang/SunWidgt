@@ -290,6 +290,117 @@ public class SunCalculator {
       }
       return julianday;
     }
+    
+    static double calcAzEl(boolean output,double T,double localtime, double latitude, double longitude,double zone)
+    {
+      double eqTime = calcEquationOfTime(T);
+      double theta  = calcSunDeclination(T);
+      if (output) {
+       // document.getElementById("eqtbox").value = Math.floor(eqTime*100 +0.5)/100.0
+        //document.getElementById("sdbox").value = Math.floor(theta*100+0.5)/100.0
+      }
+      double solarTimeFix = eqTime + 4.0 * longitude - 60.0 * zone;
+      double earthRadVec = calcSunRadVector(T);
+              double trueSolarTime = localtime + solarTimeFix;
+      while (trueSolarTime > 1440)
+      {
+        trueSolarTime -= 1440;
+      }
+      double hourAngle = trueSolarTime / 4.0 - 180.0;
+      if (hourAngle < -180) 
+      {
+        hourAngle += 360.0;
+      }
+      double haRad = degToRad(hourAngle);
+              double csz = Math.sin(degToRad(latitude)) * Math.sin(degToRad(theta)) + Math.cos(degToRad(latitude)) * Math.cos(degToRad(theta)) * Math.cos(haRad);
+      if (csz > 1.0) 
+      {
+        csz = 1.0;
+      } else if (csz < -1.0) 
+      { 
+        csz = -1.0;
+      }
+      double zenith = radToDeg(Math.acos(csz));
+      double azDenom = ( Math.cos(degToRad(latitude)) * Math.sin(degToRad(zenith)) );
+      double azRad;
+      double azimuth;
+      if (Math.abs(azDenom) > 0.001) {
+        azRad = (( Math.sin(degToRad(latitude)) * Math.cos(degToRad(zenith)) ) - Math.sin(degToRad(theta))) / azDenom;
+        if (Math.abs(azRad) > 1.0) {
+          if (azRad < 0) {
+        azRad = -1.0;
+          } else {
+        azRad = 1.0;
+          }
+        }
+        azimuth = 180.0 - radToDeg(Math.acos(azRad));
+        if (hourAngle > 0.0) {
+          azimuth = -azimuth;
+        }
+      } else {
+        if (latitude > 0.0) {
+          azimuth = 180.0;
+        } else { 
+          azimuth = 0.0;
+        }
+      }
+      if (azimuth < 0.0) {
+        azimuth += 360.0;
+      }
+      double exoatmElevation = 90.0 - zenith;
+
+    // Atmospheric Refraction correction
+      double refractionCorrection;
+      if (exoatmElevation > 85.0) {
+        refractionCorrection = 0.0;
+      } else {
+        double te = Math.tan (degToRad(exoatmElevation));
+        if (exoatmElevation > 5.0) {
+          refractionCorrection = 58.1 / te - 0.07 / (te*te*te) + 0.000086 / (te*te*te*te*te);
+        } else if (exoatmElevation > -0.575) {
+          refractionCorrection = 1735.0 + exoatmElevation * (-518.2 + exoatmElevation * (103.4 + exoatmElevation * (-12.79 + exoatmElevation * 0.711) ) );
+        } else {
+          refractionCorrection = -20.774 / te;
+        }
+        refractionCorrection = refractionCorrection / 3600.0;
+      }
+
+      double solarZen = zenith - refractionCorrection;
+      /*
+      if ((output) && (solarZen > 108.0) ) {
+        document.getElementById("azbox").value = "dark"
+        document.getElementById("elbox").value = "dark"
+      } else if (output) {
+        document.getElementById("azbox").value = Math.floor(azimuth*100 +0.5)/100.0
+        document.getElementById("elbox").value = Math.floor((90.0-solarZen)*100+0.5)/100.0
+        if (document.getElementById("showae").checked) {
+          showLineGeodesic("#ffff00", azimuth)
+        }
+      }*/
+      return (azimuth);
+    }
+    
+    static double calcSunriseSunsetAZEL(boolean rise,
+            double JD,
+            double latitude,
+            double longitude,
+            double timezone,
+            boolean dst) {
+        
+        double timeUTC = calcSunriseSetUTC(rise, JD, latitude, longitude);
+        double newTimeUTC = calcSunriseSetUTC(rise, JD + timeUTC/1440.0, latitude, longitude); 
+        
+        if (!Double.isNaN(newTimeUTC)) {
+            double timeLocal = newTimeUTC + (timezone * 60.0);
+            double riseT = calcTimeJulianCent(JD + newTimeUTC/1440.0);
+            double riseAz = calcAzEl(false, riseT, timeLocal, latitude, longitude, timezone);
+            
+            return riseAz;
+        }
+        else {
+            return Double.NaN;
+        }
+    }
 
     static Date calcSunriseSet(boolean rise,
             double JD,
@@ -307,6 +418,7 @@ public class SunCalculator {
        double newTimeUTC = calcSunriseSetUTC(rise, JD + timeUTC/1440.0, latitude, longitude); 
        if (!Double.isNaN(newTimeUTC)) {
          double timeLocal = newTimeUTC + (timezone * 60.0);
+
          /*if (document.getElementById(rise ? "showsr" : "showss").checked) {
            var riseT = calcTimeJulianCent(JD + newTimeUTC/1440.0)
            var riseAz = calcAzEl(0, riseT, timeLocal, latitude, longitude, timezone)
@@ -358,9 +470,13 @@ public class SunCalculator {
     public static class SunriseSunset {
         public final Date sunrise;
         public final Date sunset;
-        public SunriseSunset(Date sunrise,Date sunset) {
+        public final double sunrise_azel;
+        public final double sunset_azel;
+        public SunriseSunset(Date sunrise,Date sunset,double sunrise_azel,double sunset_azel) {
             this.sunrise = sunrise;
             this.sunset = sunset;
+            this.sunset_azel = sunset_azel;
+            this.sunrise_azel = sunrise_azel;
         }
     }
         
@@ -380,8 +496,9 @@ public class SunCalculator {
         
         Date sunrise = calcSunriseSet(true, jday, lat, lng, tz, false);
         Date sunset  = calcSunriseSet(false, jday, lat, lng, tz, false);
-        
-        return new SunriseSunset(sunrise,sunset);
+        double sunrise_azel= calcSunriseSunsetAZEL(true, jday, lat, lng, tz, false);
+        double sunset_azel = calcSunriseSunsetAZEL(false, jday, lat, lng, tz, false);
+        return new SunriseSunset(sunrise,sunset,sunrise_azel,sunset_azel);
     }
     
     //for test
