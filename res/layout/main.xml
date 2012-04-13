@@ -2,18 +2,103 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:orientation="vertical" >
+    android:orientation="vertical">
 
-    <TextView
-        android:id="@+id/rise"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceLarge" />
+    <LinearLayout
+        android:id="@+id/linearLayout1"
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" >
 
-    <TextView
-        android:id="@+id/set"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceLarge" />
+        <LinearLayout
+            android:id="@+id/linearLayout2"
+            android:orientation="vertical"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent" >
+
+            <TextView
+                android:id="@+id/day1_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="00/00"
+                android:textAppearance="?android:attr/textAppearanceLarge" 
+                android:padding="4px"/>
+
+            <TextView
+                android:id="@+id/day1_sunrise"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="00:00 000"
+                android:textAppearance="?android:attr/textAppearanceMedium" 
+                android:padding="2px"/>
+            <TextView
+                android:id="@+id/day1_sunset"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="00:00 000"
+                android:textAppearance="?android:attr/textAppearanceMedium" 
+                android:padding="2px"/>
+        </LinearLayout>
+        <LinearLayout
+            android:id="@+id/linearLayout2"
+            android:orientation="vertical"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent" >
+
+            <TextView
+                android:id="@+id/day2_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="00/00"
+                android:textAppearance="?android:attr/textAppearanceLarge" 
+                android:padding="4px"/>
+
+            <TextView
+                android:id="@+id/day2_sunrise"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="00:00 000"
+                android:textAppearance="?android:attr/textAppearanceMedium" 
+                android:padding="2px"/>
+            <TextView
+                android:id="@+id/day2_sunset"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="00:00 000"
+                android:textAppearance="?android:attr/textAppearanceMedium" 
+                android:padding="2px"/>
+        </LinearLayout>
+        <!-- 
+        <LinearLayout
+            android:id="@+id/linearLayout3"
+            android:orientation="vertical"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent" >
+
+            <TextView
+                android:id="@+id/day3_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="00/00"
+                android:textAppearance="?android:attr/textAppearanceLarge" 
+                android:padding="4px"/>
+
+            <TextView
+                android:id="@+id/day3_sunrise"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="00:00 000"
+                android:textAppearance="?android:attr/textAppearanceMedium" 
+                android:padding="2px"/>
+            <TextView
+                android:id="@+id/day3_sunset"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="00:00 000"
+                android:textAppearance="?android:attr/textAppearanceMedium" 
+                android:padding="2px"/>
+        </LinearLayout>
+		 -->
+    </LinearLayout>
 
 </LinearLayout>

@@ -478,6 +478,16 @@ public class SunCalculator {
             this.sunset_azel = sunset_azel;
             this.sunrise_azel = sunrise_azel;
         }
+        
+        @Override
+        public String toString() {
+            final StringBuffer sb = new StringBuffer();
+            sb.append("sunrise=").append(sunrise).append(" ");
+            sb.append("sunset=").append(sunset).append(" ");
+            sb.append("sunrise_azel=").append(sunrise_azel).append(" ");
+            sb.append("sunset_azel=").append(sunset_azel).append(" ");
+            return sb.toString();
+        }
     }
         
     public static SunriseSunset getSunriseSunset(Calendar cal,double lat,double lng,boolean dst) {
