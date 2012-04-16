@@ -3,6 +3,8 @@ package com.bk.sunwidgt;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
+import com.bk.sunwidgt.lib.MoonCalculator.MoonriseMoonset;
+import com.bk.sunwidgt.lib.MoonCalculator;
 import com.bk.sunwidgt.lib.SunCalculator;
 import com.bk.sunwidgt.lib.SunCalculator.SunriseSunset;
 
@@ -22,6 +24,7 @@ public class SunWidget extends AppWidgetProvider {
     private final static String TAG = SunWidget.class.getSimpleName();
     private final static SimpleDateFormat fmtDate = new SimpleDateFormat("MM/dd");
     private final static SimpleDateFormat fmtTime = new SimpleDateFormat("HH:mm");
+    private final static String notimeString = "--:--";
     
     @Override
     public void onUpdate(Context context,AppWidgetManager appWidgetManager, int[] appWidgetIds) {
@@ -36,37 +39,51 @@ public class SunWidget extends AppWidgetProvider {
         double lng = null == coarseLocation ? 121.453857 : coarseLocation.getLongitude();
         Log.d(TAG, "lat=" + lat + " lng=" + lng);
         
-        SunriseSunset answer = null;
+        SunriseSunset sunAnswer = null;
+        MoonriseMoonset moonAnswer = null;
         
-        
-        answer = SunCalculator.getSunriseSunset(cal,lat,lng,false);
-        fillTable(updateViews,answer,com.bk.sunwidgt.R.id.day1_title,com.bk.sunwidgt.R.id.day1_sunrise,com.bk.sunwidgt.R.id.day1_sunset);
-        Log.d(TAG, answer.toString());
+        sunAnswer = SunCalculator.getSunriseSunset(cal,lat,lng,false);
+        moonAnswer = MoonCalculator.getMoonriseMoonset(cal, lat, lng);
+        fillSunTable(updateViews,sunAnswer,com.bk.sunwidgt.R.id.day1_title,com.bk.sunwidgt.R.id.day1_sunrise,com.bk.sunwidgt.R.id.day1_sunset);
+        fillMoonTable(updateViews,moonAnswer,com.bk.sunwidgt.R.id.day1_title,com.bk.sunwidgt.R.id.day1_moonrise,com.bk.sunwidgt.R.id.day1_moonset);
+        Log.d(TAG, sunAnswer.toString());
+        Log.d(TAG, moonAnswer.toString());
         
         cal.add(Calendar.DAY_OF_MONTH, 1);
-        answer = SunCalculator.getSunriseSunset(cal,lat,lng,false);
-        fillTable(updateViews,answer,com.bk.sunwidgt.R.id.day2_title,com.bk.sunwidgt.R.id.day2_sunrise,com.bk.sunwidgt.R.id.day2_sunset);
-        Log.d(TAG, answer.toString());
-        
-        //cal.add(Calendar.DAY_OF_MONTH, 1);
-        //answer = SunCalculator.getSunriseSunset(cal,lat,lng,false);
-        //fillTable(updateViews,answer,com.bk.sunwidgt.R.id.day3_title,com.bk.sunwidgt.R.id.day3_sunrise,com.bk.sunwidgt.R.id.day3_sunset);
-        //Log.d(TAG, answer.toString());
-        //System.out.println("sunrise=" + fmt.format(answer.sunrise));
-        //System.out.println("sunset=" + fmt.format(answer.sunset));
-        
-        //((TextView)(findViewById(com.bk.sunwidgt.R.id.rise))).setText(fmt.format(answer.sunrise));
-        //((TextView)(findViewById(com.bk.sunwidgt.R.id.set))).setText(fmt.format(answer.sunset));
-        
+        sunAnswer = SunCalculator.getSunriseSunset(cal,lat,lng,false);
+        moonAnswer = MoonCalculator.getMoonriseMoonset(cal, lat, lng);
+        fillSunTable(updateViews,sunAnswer,com.bk.sunwidgt.R.id.day2_title,com.bk.sunwidgt.R.id.day2_sunrise,com.bk.sunwidgt.R.id.day2_sunset);
+        fillMoonTable(updateViews,moonAnswer,com.bk.sunwidgt.R.id.day2_title,com.bk.sunwidgt.R.id.day2_moonrise,com.bk.sunwidgt.R.id.day2_moonset);
+        Log.d(TAG, sunAnswer.toString());
+        Log.d(TAG, moonAnswer.toString());
+
+        cal.add(Calendar.DAY_OF_MONTH, 1);
+        sunAnswer = SunCalculator.getSunriseSunset(cal,lat,lng,false);
+        moonAnswer = MoonCalculator.getMoonriseMoonset(cal, lat, lng);
+        fillSunTable(updateViews,sunAnswer,com.bk.sunwidgt.R.id.day3_title,com.bk.sunwidgt.R.id.day3_sunrise,com.bk.sunwidgt.R.id.day3_sunset);
+        fillMoonTable(updateViews,moonAnswer,com.bk.sunwidgt.R.id.day3_title,com.bk.sunwidgt.R.id.day3_moonrise,com.bk.sunwidgt.R.id.day3_moonset);
+        Log.d(TAG, sunAnswer.toString());
+        Log.d(TAG, moonAnswer.toString());        
 
         appWidgetManager.updateAppWidget(appWidgetIds, updateViews);
         Log.d(TAG, "-onUpdate");
     }
     
-    private void fillTable(RemoteViews view,SunriseSunset answer,int res_title,int res_sunrise,int res_sunset) {
+    private void fillSunTable(RemoteViews view,SunriseSunset answer,int res_title,int res_sunrise,int res_sunset) {
         view.setTextViewText(res_title,  fmtDate.format(answer.sunrise));
         view.setTextViewText(res_sunrise,  fmtTime.format(answer.sunrise )  + " " + (int) answer.sunrise_azel);
         view.setTextViewText(res_sunset,  fmtTime.format(answer.sunset ) + " " + (int) answer.sunset_azel);
     }
+    
+    private void fillMoonTable(RemoteViews view,MoonriseMoonset answer,int res_title,int res_sunrise,int res_sunset) {
+        view.setTextViewText(res_title,  fmtDate.format(answer.moonrise));
+        if(answer.moonrise != null) {
+            view.setTextViewText(res_sunrise,  fmtTime.format(answer.moonrise )  + " " + (int) answer.rise_az);
+        }
+        
+        if(answer.moonset != null) {
+            view.setTextViewText(res_sunset,  fmtTime.format(answer.moonset ) + " " + (int) answer.set_sz);
+        }
+    }    
     
 }
