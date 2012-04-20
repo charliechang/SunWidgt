@@ -1,4 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">SunWidget</string>
+    <string name="sun">Sun</string>
+    <string name="mon">Mon</string>
+    <string name="tue">Tue</string>
+    <string name="wed">Wed</string>
+    <string name="thr">Thr</string>
+    <string name="fri">Fri</string>
+    <string name="sat">Sat</string>
+    <string name="sunrise">▲</string>
+    <string name="sunset">▼</string>
+    <string name="moonrise">▲</string>
+    <string name="moonset">▼</string>
+    <string name="nextmonth">Next</string>
+    <string name="prevmonth">Previous</string>
 </resources>

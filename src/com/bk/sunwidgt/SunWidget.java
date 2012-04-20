@@ -3,15 +3,18 @@ package com.bk.sunwidgt;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
+import com.bk.sunwidgt.activity.SunActivity;
 import com.bk.sunwidgt.lib.MoonCalculator.MoonriseMoonset;
 import com.bk.sunwidgt.lib.MoonCalculator;
 import com.bk.sunwidgt.lib.SunCalculator;
 import com.bk.sunwidgt.lib.SunCalculator.SunriseSunset;
 
 import android.app.Activity;
+import android.app.PendingIntent;
 import android.appwidget.AppWidgetManager;
 import android.appwidget.AppWidgetProvider;
 import android.content.Context;
+import android.content.Intent;
 import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
@@ -22,9 +25,9 @@ import android.widget.TextView;
 
 public class SunWidget extends AppWidgetProvider {
     private final static String TAG = SunWidget.class.getSimpleName();
+    public final static SimpleDateFormat fmtTime = new SimpleDateFormat("HH:mm");
     private final static SimpleDateFormat fmtDate = new SimpleDateFormat("MM/dd");
-    private final static SimpleDateFormat fmtTime = new SimpleDateFormat("HH:mm");
-    private final static String notimeString = "--:--";
+    public final static String notimeString = "--:--";
     
     @Override
     public void onUpdate(Context context,AppWidgetManager appWidgetManager, int[] appWidgetIds) {
@@ -63,7 +66,11 @@ public class SunWidget extends AppWidgetProvider {
         fillSunTable(updateViews,sunAnswer,com.bk.sunwidgt.R.id.day3_title,com.bk.sunwidgt.R.id.day3_sunrise,com.bk.sunwidgt.R.id.day3_sunset);
         fillMoonTable(updateViews,moonAnswer,com.bk.sunwidgt.R.id.day3_title,com.bk.sunwidgt.R.id.day3_moonrise,com.bk.sunwidgt.R.id.day3_moonset);
         Log.d(TAG, sunAnswer.toString());
-        Log.d(TAG, moonAnswer.toString());        
+        Log.d(TAG, moonAnswer.toString());
+
+        
+        final PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, new Intent(context,SunActivity.class), 0);
+        updateViews.setOnClickPendingIntent(com.bk.sunwidgt.R.id.mainlayout, pendingIntent);
 
         appWidgetManager.updateAppWidget(appWidgetIds, updateViews);
         Log.d(TAG, "-onUpdate");
@@ -80,9 +87,15 @@ public class SunWidget extends AppWidgetProvider {
         if(answer.moonrise != null) {
             view.setTextViewText(res_sunrise,  fmtTime.format(answer.moonrise )  + " " + (int) answer.rise_az);
         }
+        else {
+            view.setTextViewText(res_sunrise,  notimeString);
+        }
         
         if(answer.moonset != null) {
             view.setTextViewText(res_sunset,  fmtTime.format(answer.moonset ) + " " + (int) answer.set_sz);
+        }
+        else {
+            view.setTextViewText(res_sunset,  notimeString);
         }
     }    
     
