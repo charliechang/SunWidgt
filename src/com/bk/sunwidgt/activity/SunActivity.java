@@ -120,14 +120,6 @@ public class SunActivity extends Activity{
             ((TextView) moonsetRow.findViewById(weekid)).setText(SunWidget.notimeString);
         }
         
-        if(cal.get(Calendar.DAY_OF_WEEK) == selectedWeek){
-            
-            
-            
-            
-            
-        }
-        
     }
     
     private void changeMonth(boolean isIncreased) {
