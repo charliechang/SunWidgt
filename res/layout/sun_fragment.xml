@@ -1,0 +1,266 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" >
+
+    <TableLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/weektable"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_gravity="center_horizontal" >
+
+        <LinearLayout
+            xmlns:android="http://schemas.android.com/apk/res/android"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" >
+
+            <CalendarView
+                android:id="@+id/calendar"
+                android:layout_width="match_parent"
+                android:layout_height="200dp" />
+        </LinearLayout>
+
+        <TableRow>
+
+            <ImageView />
+
+            <TextView />
+
+            <TextView
+                android:padding="2dip"
+                android:text="@string/sun" />
+
+            <TextView
+                android:padding="2dip"
+                android:text="@string/mon" />
+
+            <TextView
+                android:padding="2dip"
+                android:text="@string/tue" />
+
+            <TextView
+                android:padding="2dip"
+                android:text="@string/wed" />
+
+            <TextView
+                android:padding="2dip"
+                android:text="@string/thr" />
+
+            <TextView
+                android:padding="2dip"
+                android:text="@string/fri" />
+
+            <TextView
+                android:padding="2dip"
+                android:text="@string/sat" />
+        </TableRow>
+
+        <View
+            android:layout_height="2dip"
+            android:background="#FF909090" />
+
+        <TableRow android:id="@+id/sunrise" >
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="2dip"
+                android:src="@drawable/sun" />
+
+            <TextView
+                android:gravity="left"
+                android:padding="2dip"
+                android:text="@string/sunrise" />
+
+            <TextView
+                android:id="@+id/sun"
+                android:padding="2dip" />
+
+            <TextView
+                android:id="@+id/mon"
+                android:padding="2dip" />
+
+            <TextView
+                android:id="@+id/tue"
+                android:padding="2dip" />
+
+            <TextView
+                android:id="@+id/wed"
+                android:padding="2dip" />
+
+            <TextView
+                android:id="@+id/thr"
+                android:padding="2dip" />
+
+            <TextView
+                android:id="@+id/fri"
+                android:padding="2dip" />
+
+            <TextView
+                android:id="@+id/sat"
+                android:padding="2dip" />
+        </TableRow>
+
+        <TableRow android:id="@+id/sunset" >
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="2dip"
+                android:src="@drawable/sun" />
+
+            <TextView
+                android:gravity="left"
+                android:padding="2dip"
+                android:text="@string/sunset" />
+
+            <TextView
+                android:id="@id/sun"
+                android:padding="2dip" />
+
+            <TextView
+                android:id="@id/mon"
+                android:padding="2dip" />
+
+            <TextView
+                android:id="@id/tue"
+                android:padding="2dip" />
+
+            <TextView
+                android:id="@id/wed"
+                android:padding="2dip" />
+
+            <TextView
+                android:id="@id/thr"
+                android:padding="2dip" />
+
+            <TextView
+                android:id="@id/fri"
+                android:padding="2dip" />
+
+            <TextView
+                android:id="@id/sat"
+                android:padding="2dip" />
+        </TableRow>
+
+        <View
+            android:layout_height="1dip"
+            android:background="#FF909090" />
+
+        <TableRow android:id="@+id/moonrise" >
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="2dip"
+                android:src="@drawable/moon" />
+
+            <TextView
+                android:gravity="left"
+                android:padding="2dip"
+                android:text="@string/moonrise" />
+
+            <TextView
+                android:id="@id/sun"
+                android:padding="2dip" />
+
+            <TextView
+                android:id="@id/mon"
+                android:padding="2dip" />
+
+            <TextView
+                android:id="@id/tue"
+                android:padding="2dip" />
+
+            <TextView
+                android:id="@id/wed"
+                android:padding="2dip" />
+
+            <TextView
+                android:id="@id/thr"
+                android:padding="2dip" />
+
+            <TextView
+                android:id="@id/fri"
+                android:padding="2dip" />
+
+            <TextView
+                android:id="@id/sat"
+                android:padding="2dip" />
+        </TableRow>
+
+        <TableRow android:id="@+id/moonset" >
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="1dip"
+                android:src="@drawable/moon" />
+
+            <TextView
+                android:gravity="left"
+                android:padding="2dip"
+                android:text="@string/moonset" />
+
+            <TextView
+                android:id="@id/sun"
+                android:padding="2dip" />
+
+            <TextView
+                android:id="@id/mon"
+                android:padding="2dip" />
+
+            <TextView
+                android:id="@id/tue"
+                android:padding="2dip" />
+
+            <TextView
+                android:id="@id/wed"
+                android:padding="2dip" />
+
+            <TextView
+                android:id="@id/thr"
+                android:padding="2dip" />
+
+            <TextView
+                android:id="@id/fri"
+                android:padding="2dip" />
+
+            <TextView
+                android:id="@id/sat"
+                android:padding="2dip" />
+        </TableRow>
+
+        <View
+            android:layout_height="2dip"
+            android:background="#FF909090" />
+
+        <LinearLayout
+            xmlns:android="http://schemas.android.com/apk/res/android"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="bottom"
+            android:orientation="horizontal" >
+
+            <Button
+                android:id="@+id/prev_month"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom"
+                android:layout_weight="1"
+                android:padding="2dp"
+                android:text="@string/prevmonth" />
+
+            <Button
+                android:id="@+id/next_month"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom"
+                android:layout_weight="1"
+                android:padding="2dp"
+                android:text="@string/nextmonth" />
+        </LinearLayout>
+    </TableLayout>
+
+</ScrollView>
