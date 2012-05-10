@@ -83,7 +83,6 @@ public class SunWidget extends AppWidgetProvider {
     }
     
     private void fillMoonTable(RemoteViews view,MoonriseMoonset answer,int res_title,int res_sunrise,int res_sunset) {
-        view.setTextViewText(res_title,  fmtDate.format(answer.moonrise));
         if(answer.moonrise != null) {
             view.setTextViewText(res_sunrise,  fmtTime.format(answer.moonrise )  + " " + (int) answer.rise_az);
         }
