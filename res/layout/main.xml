@@ -1,129 +1,159 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
-    android:orientation="vertical">
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_marginBottom="8dp"
+    android:layout_marginLeft="8dp"
+    android:layout_marginRight="8dp"
+    android:layout_marginTop="8dp"
+    android:orientation="vertical" 
+    android:id="@+id/mainlayout">
 
-    <LinearLayout
-        android:id="@+id/mainlayout"
-        android:orientation="horizontal"
+    <!--
+         We define separate margins to allow for flexibility in twiddling the margins
+         depending on device form factor and target SDK version.
+    -->
+
+    <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content" >
 
-        <LinearLayout
-            android:id="@+id/linearLayout2"
-            android:orientation="vertical"
+        <TextView
+            android:id="@+id/widget_city"
             android:layout_width="wrap_content"
-            android:layout_height="match_parent" >
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:scaleType="fitXY"
+            android:text="@string/empty_view_text"
+            android:textColor="#e5e5e1"
+            android:textSize="24sp" />
 
-            <TextView
-                android:id="@+id/day1_title"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textAppearance="?android:attr/textAppearanceLarge" 
-                android:padding="1dp"/>
-
-            <TextView
-                android:id="@+id/day1_sunrise"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textAppearance="?android:attr/textAppearanceMedium" 
-                android:padding="1dp"/>
-            <TextView
-                android:id="@+id/day1_sunset"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textAppearance="?android:attr/textAppearanceMedium" 
-                android:padding="1dp"/>
-            <TextView
-                android:id="@+id/day1_moonrise"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textAppearance="?android:attr/textAppearanceMedium" 
-                android:padding="1dp"/>
-            <TextView
-                android:id="@+id/day1_moonset"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textAppearance="?android:attr/textAppearanceMedium" 
-                android:padding="1dp"/>
-        </LinearLayout>
-        <LinearLayout
-            android:id="@+id/linearLayout3"
-            android:orientation="vertical"
+        <TextView
+            android:id="@+id/day1_title"
             android:layout_width="wrap_content"
-            android:layout_height="match_parent" >
+            android:layout_height="wrap_content"
+            android:layout_gravity="right|bottom"
+            android:text="@string/empty_view_text"
+            android:textSize="15sp" />
+    </FrameLayout>
 
-            <TextView
-                android:id="@+id/day2_title"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textAppearance="?android:attr/textAppearanceLarge" 
-                android:padding="1dp"/>
+    <LinearLayout
+        android:id="@+id/linearLayout1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/item_bg_light"
+        android:orientation="horizontal" >
 
-            <TextView
-                android:id="@+id/day2_sunrise"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textAppearance="?android:attr/textAppearanceMedium" 
-                android:padding="1dp"/>
-            <TextView
-                android:id="@+id/day2_sunset"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textAppearance="?android:attr/textAppearanceMedium" 
-                android:padding="1dp"/>
-                        <TextView
-                android:id="@+id/day2_moonrise"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textAppearance="?android:attr/textAppearanceMedium" 
-                android:padding="1dp"/>
-            <TextView
-                android:id="@+id/day2_moonset"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textAppearance="?android:attr/textAppearanceMedium" 
-                android:padding="1dp"/>
-        </LinearLayout>
-        <LinearLayout
-            android:id="@+id/linearLayout4"
-            android:orientation="vertical"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent" >
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center_vertical"
+            android:padding="2dip"
+            android:src="@drawable/sun" />
 
-            <TextView
-                android:id="@+id/day3_title"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textAppearance="?android:attr/textAppearanceLarge" 
-                android:padding="1dp"/>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center_vertical"
+            android:padding="2dip"
+            android:text="@string/sunrise" />
 
-            <TextView
-                android:id="@+id/day3_sunrise"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textAppearance="?android:attr/textAppearanceMedium" 
-                android:padding="1dp"/>
-            <TextView
-                android:id="@+id/day3_sunset"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textAppearance="?android:attr/textAppearanceMedium" 
-                android:padding="1dp"/>
-                        <TextView
-                android:id="@+id/day3_moonrise"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textAppearance="?android:attr/textAppearanceMedium" 
-                android:padding="1dp"/>
-            <TextView
-                android:id="@+id/day3_moonset"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textAppearance="?android:attr/textAppearanceMedium" 
-                android:padding="1dp"/>
-        </LinearLayout>
+        <TextView
+            android:id="@+id/day1_sunrise"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center_vertical"
+            android:padding="2dip"
+            android:textSize="20sp" />
     </LinearLayout>
 
+    <LinearLayout
+        android:id="@+id/linearLayout2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/item_bg_dark"
+        android:orientation="horizontal" >
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center_vertical"
+            android:padding="2dip"
+            android:src="@drawable/sun" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center_vertical"
+            android:padding="2dip"
+            android:text="@string/sunset" />
+
+        <TextView
+            android:id="@+id/day1_sunset"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center_vertical"
+            android:padding="2dip"
+            android:textSize="20sp" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/linearLayout3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/item_bg_light"
+        android:orientation="horizontal" >
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center_vertical"
+            android:padding="2dip"
+            android:src="@drawable/moon" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center_vertical"
+            android:padding="2dip"
+            android:text="@string/moonrise" />
+
+        <TextView
+            android:id="@+id/day1_moonrise"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center_vertical"
+            android:padding="2dip"
+            android:textSize="20sp" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/linearLayout4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/item_bg_dark"
+        android:orientation="horizontal" >
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center_vertical"
+            android:padding="2dip"
+            android:src="@drawable/moon" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center_vertical"
+            android:padding="2dip"
+            android:text="@string/moonset" />
+
+        <TextView
+            android:id="@+id/day1_moonset"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center_vertical"
+            android:padding="2dip"
+            android:textSize="20sp" />
+    </LinearLayout>    
 </LinearLayout>

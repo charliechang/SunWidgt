@@ -1,7 +1,12 @@
 package com.bk.sunwidgt;
 
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.List;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
 
 import com.bk.sunwidgt.activity.SunActivity;
 import com.bk.sunwidgt.lib.MoonCalculator.MoonriseMoonset;
@@ -15,8 +20,11 @@ import android.appwidget.AppWidgetManager;
 import android.appwidget.AppWidgetProvider;
 import android.content.Context;
 import android.content.Intent;
+import android.location.Address;
+import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationManager;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.RemoteViews;
@@ -32,16 +40,39 @@ public class SunWidget extends AppWidgetProvider {
     @Override
     public void onUpdate(Context context,AppWidgetManager appWidgetManager, int[] appWidgetIds) {
         Log.d(TAG, "+onUpdate");
-        RemoteViews updateViews = new RemoteViews( context.getPackageName(), com.bk.sunwidgt.R.layout.main);
+        final Geocoder gencorder = new Geocoder(context);
+        final RemoteViews updateViews = new RemoteViews( context.getPackageName(), com.bk.sunwidgt.R.layout.main);
         Calendar cal = Calendar.getInstance();
         
         LocationManager locManager = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
         Location coarseLocation = locManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
         
-        double lat = null == coarseLocation ? 25.045792 : coarseLocation.getLatitude();
-        double lng = null == coarseLocation ? 121.453857 : coarseLocation.getLongitude();
+        final double lat = null == coarseLocation ? 25.045792 : coarseLocation.getLatitude();
+        final double lng = null == coarseLocation ? 121.453857 : coarseLocation.getLongitude();
         Log.d(TAG, "lat=" + lat + " lng=" + lng);
         
+        final AsyncTask<Void,Void,Address> getlocationTask = new AsyncTask<Void,Void,Address>() {
+
+            @Override
+            protected Address doInBackground(Void... arg0) {
+                try {
+                    List<Address> listAddress = gencorder.getFromLocation(lat, lng, 1);
+                    if(listAddress != null && listAddress.size() > 0) {
+                        final Address address = listAddress.get(0);
+                        Log.i(TAG, "address=" + address);
+                        return address;
+                    }
+                } catch (IOException e) {
+                    Log.e(TAG, "getFromLocation error", e);
+                }
+
+                return null;
+            }
+            
+        };
+        
+        getlocationTask.execute();
+
         SunriseSunset sunAnswer = null;
         MoonriseMoonset moonAnswer = null;
         
@@ -51,28 +82,31 @@ public class SunWidget extends AppWidgetProvider {
         fillMoonTable(updateViews,moonAnswer,com.bk.sunwidgt.R.id.day1_title,com.bk.sunwidgt.R.id.day1_moonrise,com.bk.sunwidgt.R.id.day1_moonset);
         Log.d(TAG, sunAnswer.toString());
         Log.d(TAG, moonAnswer.toString());
-        
-        cal.add(Calendar.DAY_OF_MONTH, 1);
-        sunAnswer = SunCalculator.getSunriseSunset(cal,lat,lng,false);
-        moonAnswer = MoonCalculator.getMoonriseMoonset(cal, lat, lng);
-        fillSunTable(updateViews,sunAnswer,com.bk.sunwidgt.R.id.day2_title,com.bk.sunwidgt.R.id.day2_sunrise,com.bk.sunwidgt.R.id.day2_sunset);
-        fillMoonTable(updateViews,moonAnswer,com.bk.sunwidgt.R.id.day2_title,com.bk.sunwidgt.R.id.day2_moonrise,com.bk.sunwidgt.R.id.day2_moonset);
-        Log.d(TAG, sunAnswer.toString());
-        Log.d(TAG, moonAnswer.toString());
 
-        cal.add(Calendar.DAY_OF_MONTH, 1);
-        sunAnswer = SunCalculator.getSunriseSunset(cal,lat,lng,false);
-        moonAnswer = MoonCalculator.getMoonriseMoonset(cal, lat, lng);
-        fillSunTable(updateViews,sunAnswer,com.bk.sunwidgt.R.id.day3_title,com.bk.sunwidgt.R.id.day3_sunrise,com.bk.sunwidgt.R.id.day3_sunset);
-        fillMoonTable(updateViews,moonAnswer,com.bk.sunwidgt.R.id.day3_title,com.bk.sunwidgt.R.id.day3_moonrise,com.bk.sunwidgt.R.id.day3_moonset);
-        Log.d(TAG, sunAnswer.toString());
-        Log.d(TAG, moonAnswer.toString());
-
+        try {
+            final Address address = getlocationTask.get(9L, TimeUnit.SECONDS);
+            
+            if(address != null) {
+                if(address.getAdminArea() != null) {
+                    updateViews.setTextViewText(com.bk.sunwidgt.R.id.widget_city, address.getAdminArea());
+                }
+                else if(address.getCountryName() != null) {
+                    updateViews.setTextViewText(com.bk.sunwidgt.R.id.widget_city, address.getCountryName());
+                }
+            }
+        } catch (InterruptedException e) {
+            Log.e(TAG, "", e);
+        } catch (ExecutionException e) {
+            Log.e(TAG, "", e);
+        } catch (TimeoutException e) {
+            Log.e(TAG, "", e);
+        }
         
         final PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, new Intent(context,SunActivity.class), 0);
         updateViews.setOnClickPendingIntent(com.bk.sunwidgt.R.id.mainlayout, pendingIntent);
 
         appWidgetManager.updateAppWidget(appWidgetIds, updateViews);
+  
         Log.d(TAG, "-onUpdate");
     }
     
