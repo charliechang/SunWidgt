@@ -5,7 +5,6 @@ import android.app.Activity;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.MotionEvent;
 import android.view.Window;
 
 public class SunActivity extends Activity {
@@ -19,23 +18,12 @@ public class SunActivity extends Activity {
         requestWindowFeature(Window.FEATURE_ACTION_BAR_OVERLAY);
         setContentView(com.bk.sunwidgt.R.layout.sun_activity);
         /*
-         * calendarView.setOnGenericMotionListener(new
-         * View.OnGenericMotionListener() {
-         * @Override public boolean onGenericMotion(View v, MotionEvent event) {
-         * Log.d(TAG, "event="+event); return false; } });
+         * new Handler().post(new Runnable() {
+         * @Override public void run() { FragmentManager fm =
+         * getFragmentManager(); fm.beginTransaction().add(new
+         * CalendarSlideFragment(), null).commitAllowingStateLoss();
+         * fm.executePendingTransactions(); }});
          */
-        // setWeektable();
-    }
-
-    public boolean onGenericMotionEvent(MotionEvent event) {
-        Log.d(TAG, "generic motiion event=" + event);
-        return super.onGenericMotionEvent(event);
-    }
-
-    @Override
-    public boolean onTouchEvent(MotionEvent event) {
-        Log.d(TAG, "touch event=" + event);
-        return super.onTouchEvent(event);
     }
 
     @Override

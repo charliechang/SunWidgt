@@ -231,7 +231,7 @@ public class SunCalculator {
           double month = (E < 14) ? E - 1 : E - 13;
           double year = ((month > 2) ? C - 4716 : C - 4715);
           
-          if(year < 1900 || month < 1 || month > 11 || day < 0 || day > 31) {
+          if(year < 1900 || month < 1 || month > 12 || day < 0 || day > 31) {
               throw new IllegalArgumentException("incorrect date year=" + year + " month=" + month + " day=" + day);
           }
           
