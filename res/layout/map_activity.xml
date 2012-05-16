@@ -1,13 +1,38 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android" 
-    android:layout_width="fill_parent" 
-    android:layout_height="fill_parent">
- 
-    <com.google.android.maps.MapView 
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent" >
+
+    <com.google.android.maps.MapView
         android:id="@+id/mapview"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
-        android:enabled="true"
+        android:apiKey="0aJCC5wONb-U4p_9b8cjaPuONBYXMGWpMKsBS7w"
         android:clickable="true"
-        android:apiKey="0aJCC5wONb-U4p_9b8cjaPuONBYXMGWpMKsBS7w"/>
+        android:enabled="true" />
+
+    <LinearLayout
+        android:id="@+id/address"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:padding="2dp" >
+
+        <TextView
+            android:id="@+id/map_address"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:editable="false"
+            android:focusable="false"
+			android:textColor="#000000"
+            android:singleLine="false"/>
+
+        <Button
+            android:id="@+id/map_bookmark"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/map_bookmark" />
+    </LinearLayout>
+
 </RelativeLayout>

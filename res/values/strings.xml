@@ -18,4 +18,5 @@
     <string name="empty_view_text">Unknown</string>
     <string name="toast_format_string">%1$s says Hi!</string>
     <string name="item_format_string">%1$d\u00B0 in %2$s</string>
+    <string name="map_bookmark">Bookmark</string>
 </resources>
