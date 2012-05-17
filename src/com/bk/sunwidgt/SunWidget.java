@@ -14,6 +14,7 @@ import com.bk.sunwidgt.lib.MoonCalculator.MoonriseMoonset;
 import com.bk.sunwidgt.lib.MoonCalculator;
 import com.bk.sunwidgt.lib.SunCalculator;
 import com.bk.sunwidgt.lib.SunCalculator.SunriseSunset;
+import com.bk.sunwidgt.task.SearchAddressTask;
 
 import android.app.Activity;
 import android.app.PendingIntent;
@@ -36,7 +37,7 @@ import android.widget.Toast;
 public class SunWidget extends AppWidgetProvider {
     private final static String TAG = SunWidget.class.getSimpleName();
     public final static SimpleDateFormat fmtTime = new SimpleDateFormat("HH:mm");
-    private final static SimpleDateFormat fmtDate = new SimpleDateFormat("MM/dd");
+    public final static SimpleDateFormat fmtDate = new SimpleDateFormat("MM/dd");
     public final static String notimeString = "--:--";
     private final static String REFRESH_ACTION = SunWidget.class.getName() + ".refresh";
 
@@ -73,27 +74,8 @@ public class SunWidget extends AppWidgetProvider {
         final double lat = null == coarseLocation ? 25.045792 : coarseLocation.getLatitude();
         final double lng = null == coarseLocation ? 121.453857 : coarseLocation.getLongitude();
         Log.d(TAG, "lat=" + lat + " lng=" + lng);
-
-        final AsyncTask<Void, Void, Address> getlocationTask = new AsyncTask<Void, Void, Address>() {
-
-            @Override
-            protected Address doInBackground(Void... arg0) {
-                try {
-                    List<Address> listAddress = gencorder.getFromLocation(lat, lng, 1);
-                    if (listAddress != null && listAddress.size() > 0) {
-                        final Address address = listAddress.get(0);
-                        Log.i(TAG, "address=" + address);
-                        return address;
-                    }
-                } catch (IOException e) {
-                    Log.e(TAG, "getFromLocation error", e);
-                }
-
-                return null;
-            }
-
-        };
-
+        
+        final SearchAddressTask getlocationTask = new SearchAddressTask(gencorder,lat,lng);
         getlocationTask.execute();
 
         SunriseSunset sunAnswer = null;

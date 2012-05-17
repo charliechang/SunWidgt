@@ -19,20 +19,30 @@
         android:layout_alignParentRight="true"
         android:padding="2dp" >
 
-        <TextView
-            android:id="@+id/map_address"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:editable="false"
-            android:focusable="false"
-			android:textColor="#000000"
-            android:singleLine="false"/>
-
         <Button
             android:id="@+id/map_bookmark"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:onClick="doBookmark"
             android:text="@string/map_bookmark" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/address2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:padding="2dp" >
+
+        <TextView
+            android:id="@+id/map_address"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:singleLine="false"
+            android:textColor="#000000"
+            android:textSize="14sp"
+            android:background="#88FFFFFF" />
     </LinearLayout>
 
 </RelativeLayout>
