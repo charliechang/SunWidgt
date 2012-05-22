@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
-    android:layout_height="fill_parent" >
-
+    android:layout_height="fill_parent"
+    android:padding="2dp"
+    android:id="@+id/map_relative_layout">
+    
     <com.google.android.maps.MapView
         android:id="@+id/mapview"
         android:layout_width="fill_parent"
@@ -11,38 +13,50 @@
         android:clickable="true"
         android:enabled="true" />
 
-    <LinearLayout
-        android:id="@+id/address"
+    <Button
+        android:id="@+id/map_bookmark"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_alignParentRight="true"
-        android:padding="2dp" >
+        android:onClick="doBookmark"
+        android:text="@string/map_bookmark" />
 
-        <Button
-            android:id="@+id/map_bookmark"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:onClick="doBookmark"
-            android:text="@string/map_bookmark" />
-    </LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/address2"
+    <TextView
+        android:id="@+id/map_address"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentTop="true"
-        android:padding="2dp" >
+        android:layout_above="@+id/map_bookmark"
+        android:layout_alignParentRight="true"
+        android:background="#88FFFFFF"
+        android:singleLine="false"
+        android:textColor="#000000"
+        android:textSize="14sp" />
 
-        <TextView
-            android:id="@+id/map_address"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:singleLine="false"
-            android:textColor="#000000"
-            android:textSize="14sp"
-            android:background="#88FFFFFF" />
-    </LinearLayout>
+    <DatePicker
+        android:id="@+id/map_datepicker"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:endYear="2100"
+        android:startYear="2011"
+        android:visibility="gone" />
+
+    <CheckBox
+        android:id="@+id/map_datepicker_checkbox"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+		android:layout_alignParentLeft="true"
+        android:layout_alignParentBottom="true" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@+id/map_datepicker_checkbox"
+        android:layout_alignBaseline="@+id/map_datepicker_checkbox"
+        android:background="#88FFFFFF"
+        android:text="@string/map_datepicker_checkbox"
+        android:textColor="#000000" />
 
 </RelativeLayout>

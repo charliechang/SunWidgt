@@ -19,10 +19,20 @@
     <string name="empty_view_text">Unknown</string>
     <string name="toast_format_string">%1$s says Hi!</string>
     <string name="item_format_string">%1$d\u00B0 in %2$s</string>
+    <string name="menuitem_title_location">Location</string>
+    <string name="menuitem_title_bookmarks">Bookmarks</string>
+    <string name="menuitem_title_calendar">Calendar</string>
     <string name="map_bookmark">Bookmark</string>
     <string name="map_locating">Locating</string>
 	<string name="map_sunrise">Sunrise: </string>
 	<string name="map_sunset">Sunset: </string>
 	<string name="map_moonrise">Moonrise: </string>
 	<string name="map_moonset">Moonset: </string>
+	<string name="map_bookmark_address_hint">Address to Fill</string>
+	<string name="map_bookmark_empty_address">Empty Address</string>
+	<string name="map_no_bookmark">Empty</string>
+	<string name="bookmarklist_remove">Remove</string>
+	<string name="bookmarklist_edit">Edit</string>
+	<string name="bookmarklist_setdefault">Default</string>
+	<string name="map_datepicker_checkbox">Show Date</string>
 </resources>

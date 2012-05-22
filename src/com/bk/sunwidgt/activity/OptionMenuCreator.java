@@ -1,0 +1,50 @@
+package com.bk.sunwidgt.activity;
+
+import android.content.Context;
+import android.content.Intent;
+import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
+
+public class OptionMenuCreator {
+    private final static String TAG = "Sun" + OptionMenuCreator.class.getSimpleName();
+    private final static int MENUITEM_CALENDAR_ID = 0;
+    private final static int MENUITEM_BOOKMARKLIST_ID = 1;
+    private final static int MENUITEM_MAP_ID = 2;
+    
+    public boolean onCreateOptionsMenu(Menu menu) {
+        menu.add(0, MENUITEM_CALENDAR_ID, MENUITEM_CALENDAR_ID, com.bk.sunwidgt.R.string.menuitem_title_calendar);
+        menu.add(0, MENUITEM_BOOKMARKLIST_ID, MENUITEM_BOOKMARKLIST_ID, com.bk.sunwidgt.R.string.menuitem_title_bookmarks);
+        menu.add(0, MENUITEM_MAP_ID, MENUITEM_MAP_ID, com.bk.sunwidgt.R.string.menuitem_title_location);
+        
+        return true;
+    }
+    
+    public boolean onOptionsItemSelected (Context context,MenuItem item) {
+        boolean ret = true;
+        Intent activityIntent = null;
+        switch(item.getItemId()) {
+            
+            case MENUITEM_CALENDAR_ID:
+                activityIntent = new Intent(context,SunActivity.class);
+                break;
+            case MENUITEM_BOOKMARKLIST_ID:
+                activityIntent = new Intent(context,BookmarkListActivity.class);
+                break;
+            case MENUITEM_MAP_ID:
+                activityIntent = new Intent(context,SunMapActivity.class);
+                break;
+            default:
+                Log.w(TAG, "Unable to handle item id=" + item.getItemId());
+                ret = false;
+                break;
+        }
+        
+        if(ret && !activityIntent.equals(context)) {
+            context.startActivity(activityIntent);
+        }
+
+        return ret;
+    }
+
+}

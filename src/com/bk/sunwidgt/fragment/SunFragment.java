@@ -10,50 +10,55 @@ import android.gesture.Gesture;
 import android.gesture.GestureLibraries;
 import android.gesture.GestureLibrary;
 import android.gesture.GestureOverlayView;
+import android.gesture.GestureOverlayView.OnGestureListener;
 import android.gesture.GestureOverlayView.OnGesturePerformedListener;
+import android.gesture.GestureOverlayView.OnGesturingListener;
 import android.gesture.Prediction;
 import android.graphics.Color;
+import android.graphics.Path;
 import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CalendarView;
+import android.widget.ListView;
 import android.widget.TableRow;
 import android.widget.TextView;
 
 import com.bk.sunwidgt.SunWidget;
+import com.bk.sunwidgt.adapter.LocationAdapter;
 import com.bk.sunwidgt.lib.MoonCalculator;
 import com.bk.sunwidgt.lib.SunCalculator;
 
 public class SunFragment extends Fragment {
-
     private final static String TAG = SunFragment.class.getSimpleName();
 
     private LocationManager m_locManager;
     private GestureLibrary m_gestureLib;
-    
+
     private Runnable m_nextMonthRunnable = new Runnable() {
 
         @Override
         public void run() {
             changeMonth(true);
         }
-        
+
     };
-    
+
     private Runnable m_prevMonthRunnable = new Runnable() {
 
         @Override
         public void run() {
             changeMonth(false);
         }
-        
+
     };
-    
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         // mLogger.logMethodName();
@@ -64,9 +69,8 @@ public class SunFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        // mLogger.logMethodName();
+        Log.i(TAG, "onCreateView");
         final View view = inflater.inflate(com.bk.sunwidgt.R.layout.sun_fragment, container, false);
-
         final CalendarView calendarView = (CalendarView) view
                 .findViewById(com.bk.sunwidgt.R.id.calendar);
         calendarView.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
@@ -77,37 +81,20 @@ public class SunFragment extends Fragment {
 
             }
         });
-/*
-        calendarView.setOnTouchListener(new View.OnTouchListener() {
-
-            @Override
-            public boolean onTouch(View view, MotionEvent event) {
-                Log.d(TAG, "calendarView onTouch event=" + event);
-                return false;
-            }
-        });
-*/        
-/*
-        ((Button) view.findViewById(com.bk.sunwidgt.R.id.next_month))
-                .setOnClickListener(new View.OnClickListener() {
-
-                    @Override
-                    public void onClick(View v) {
-                        changeMonth(true);
-
-                    }
-                });
-
-        ((Button) view.findViewById(com.bk.sunwidgt.R.id.prev_month))
-                .setOnClickListener(new View.OnClickListener() {
-
-                    @Override
-                    public void onClick(View v) {
-                        changeMonth(false);
-
-                    }
-                });
-*/
+        /*
+         * calendarView.setOnTouchListener(new View.OnTouchListener() {
+         * @Override public boolean onTouch(View view, MotionEvent event) {
+         * Log.d(TAG, "calendarView onTouch event=" + event); return false; }
+         * });
+         */
+        /*
+         * ((Button) view.findViewById(com.bk.sunwidgt.R.id.next_month))
+         * .setOnClickListener(new View.OnClickListener() {
+         * @Override public void onClick(View v) { changeMonth(true); } });
+         * ((Button) view.findViewById(com.bk.sunwidgt.R.id.prev_month))
+         * .setOnClickListener(new View.OnClickListener() {
+         * @Override public void onClick(View v) { changeMonth(false); } });
+         */
         new Handler().post(new Runnable() {
 
             @Override
@@ -123,32 +110,37 @@ public class SunFragment extends Fragment {
 
         m_gestureLib = GestureLibraries.fromRawResource(getActivity(),
                 com.bk.sunwidgt.R.raw.gestures);
-        
+
         if (!m_gestureLib.load()) {
             Log.w(TAG, "Unable to load Gestures");
         }
         else {
-
+            
             gestureOverlayView.addOnGesturePerformedListener(new OnGesturePerformedListener() {
-
                 @Override
                 public void onGesturePerformed(GestureOverlayView overlay, Gesture gesture) {
-                    ArrayList<Prediction> predictions = m_gestureLib.recognize(gesture);
-                    // We want at least one prediction
+                    ArrayList<Prediction> predictions =
+                            m_gestureLib.recognize(gesture); // We want at least
+                                                             // one prediction
                     if (predictions.size() > 0) {
-                        Prediction prediction = predictions.get(0);
-                        // We want at least some confidence in the result
+                        Prediction prediction = predictions.get(0); // We want
+                                                                    // at least
+                                                                    // some
+                                                                    // confidence
+                                                                    // in the
+                                                                    // result
                         if (prediction.score > 1.0) {
-                            if(prediction.name.startsWith("bknext")) {
+                            if (prediction.name.startsWith("bknext")) {
                                 new Handler().post(m_nextMonthRunnable);
                             }
-                            else if(prediction.name.startsWith("bkprev")) {
+                            else if (prediction.name.startsWith("bkprev")) {
                                 new Handler().post(m_prevMonthRunnable);
                             }
                         }
                     }
                 }
             });
+
         }
         return gestureOverlayView;
     }
@@ -264,18 +256,6 @@ public class SunFragment extends Fragment {
     public void onStart() {
         // mLogger.logMethodName();
         super.onStart();
-    }
-
-    @Override
-    public void onResume() {
-        // mLogger.logMethodName();
-        super.onResume();
-    }
-
-    @Override
-    public void onPause() {
-        // mLogger.logMethodName();
-        super.onPause();
     }
 
     @Override
