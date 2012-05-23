@@ -59,4 +59,21 @@
         android:text="@string/map_datepicker_checkbox"
         android:textColor="#000000" />
 
+    <CheckBox
+        android:id="@+id/map_showbookmarks_checkbox"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+		android:layout_alignParentLeft="true"
+        android:layout_above="@+id/map_datepicker_checkbox"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@+id/map_showbookmarks_checkbox"
+        android:layout_alignBaseline="@+id/map_showbookmarks_checkbox"
+        android:background="#88FFFFFF"
+        android:text="@string/map_show_bookmarks"
+        android:textColor="#000000" />    
+    
+    
 </RelativeLayout>

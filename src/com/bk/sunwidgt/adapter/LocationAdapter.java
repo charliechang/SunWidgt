@@ -102,23 +102,18 @@ public class LocationAdapter extends ArrayAdapter<LocationAdapterData> {
                     if(selectedLocAddressData.location.getLongitude() != 0.0 && selectedLocAddressData.location.getLatitude() != 0.0) {
                         intent.putExtra(SunMapActivity.START_LOCATION, selectedLocAddressData.location);
                         intent.putExtra(SunMapActivity.LOCATION_ADDRESS, selectedLocAddressData.address);
+                        intent.putExtra(SunMapActivity.SHOW_BOOKMARK_LOCATION, false);
                     }
                     
-                    
-                    //Put extras
-                    final List<Parcelable> extraLocationList = new ArrayList<Parcelable>(LocationAdapter.this.getCount());
-                    for(int k = 0;k < LocationAdapter.this.getCount();k++) {
-                        final LocationAdapterData locData = getItem(k);
-                        if(locData.location.getLatitude() != 0.0 && locData.location.getLongitude() != 0.0) {
-                            extraLocationList.add(locData.location);
-                        }
-                    }
-                    if(extraLocationList.size() > 0) {
-                        Log.i(TAG, "put START_LOCATION_EXTRAS extraLocationList.size()=" + extraLocationList.size());
-                        intent.putExtra(SunMapActivity.START_LOCATION_EXTRAS, extraLocationList.toArray(new Parcelable[0]));
+                    final LocationAdapterData[] locData = BookmarkStoreUtil.loadBookmarks(getContext());
+
+                    if(locData.length > 0) {
+                        Log.i(TAG, "put START_LOCATION_EXTRAS extraLocationList.size()=" + locData.length);
+                        intent.putExtra(SunMapActivity.START_LOCATION_BOOKMARKS, BookmarkStoreUtil.tolocationParcelableArray(locData));
                     }
                     
-                    activity.startActivityForResult(intent, BookmarkListActivity.REQUEST_CODEBASE + position);
+                    intent.putExtra(BookmarkListActivity.SAVE_BOOKMARK_INDEX, position);                    
+                    activity.startActivityForResult(intent, BookmarkListActivity.REQUEST_FROM_BOOKMARK );
                 }
 
             }

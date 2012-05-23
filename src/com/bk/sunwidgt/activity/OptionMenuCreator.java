@@ -1,5 +1,8 @@
 package com.bk.sunwidgt.activity;
 
+import com.bk.sunwidgt.adapter.BookmarkStoreUtil;
+import com.bk.sunwidgt.adapter.LocationAdapterData;
+
 import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
@@ -33,6 +36,13 @@ public class OptionMenuCreator {
                 break;
             case MENUITEM_MAP_ID:
                 activityIntent = new Intent(context,SunMapActivity.class);
+                final LocationAdapterData[] locData = BookmarkStoreUtil.loadBookmarks(context);
+
+                if(locData.length > 0) {
+                    Log.i(TAG, "put START_LOCATION_EXTRAS extraLocationList.size()=" + locData.length);
+                    activityIntent.putExtra(SunMapActivity.START_LOCATION_BOOKMARKS, BookmarkStoreUtil.tolocationParcelableArray(locData));
+                }
+                
                 break;
             default:
                 Log.w(TAG, "Unable to handle item id=" + item.getItemId());

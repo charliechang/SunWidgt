@@ -34,5 +34,6 @@
 	<string name="bookmarklist_remove">Remove</string>
 	<string name="bookmarklist_edit">Edit</string>
 	<string name="bookmarklist_setdefault">Default</string>
-	<string name="map_datepicker_checkbox">Show Date</string>
+	<string name="map_datepicker_checkbox">Date</string>
+	<string name="map_show_bookmarks">Bookmarks</string>
 </resources>

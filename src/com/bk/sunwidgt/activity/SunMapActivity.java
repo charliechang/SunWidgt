@@ -47,8 +47,9 @@ import com.google.android.maps.Overlay;
 
 public class SunMapActivity extends MapActivity {
     public final static String START_LOCATION = SunMapActivity.class.getName() + ".start_location";
-    public final static String START_LOCATION_EXTRAS = SunMapActivity.class.getName()
-            + ".start_location_extras";
+    public final static String START_LOCATION_BOOKMARKS = SunMapActivity.class.getName()
+            + ".start_location_bookmarks";
+    public final static String SHOW_BOOKMARK_LOCATION = SunMapActivity.class.getName() + ".show_bookmakrs_location";
     public final static String SHOW_TIME = SunMapActivity.class.getName() + ".show_time";
     public final static String LOCATION_ADDRESS = SunMapActivity.class.getName()
             + ".location_address";
@@ -85,7 +86,8 @@ public class SunMapActivity extends MapActivity {
 
     private DatePicker m_datePicker;
     private CheckBox m_dataPickerEnableCheckbox;
-
+    private CheckBox m_showBookmarksCheckbox;
+    
     private RelativeLayout m_mainLayout;
 
     private Handler m_Handler = new Handler() {
@@ -276,6 +278,8 @@ public class SunMapActivity extends MapActivity {
         m_datePicker = (DatePicker) findViewById(com.bk.sunwidgt.R.id.map_datepicker);
 
         m_mainLayout = (RelativeLayout) findViewById(com.bk.sunwidgt.R.id.map_relative_layout);
+        
+        m_showBookmarksCheckbox = (CheckBox) findViewById(com.bk.sunwidgt.R.id.map_showbookmarks_checkbox);
 
         // Retrieve start location
         Location startLocation = null;
@@ -329,24 +333,12 @@ public class SunMapActivity extends MapActivity {
         m_mapController.setZoom(DEFAULT_ZOOM_LEVEL);
 
         // Add time layer
-        UserTouchedOverlayView mapOverlay = new UserTouchedOverlayView();
+        final UserTouchedOverlayView userTouchMapOverlay = new UserTouchedOverlayView();
+        
         List<Overlay> listOfOverlays = m_mapView.getOverlays();
         listOfOverlays.clear();
-        listOfOverlays.add(mapOverlay);
-
-        if (getIntent().hasExtra(START_LOCATION_EXTRAS)) {
-            Log.i(TAG, "Found " + START_LOCATION_EXTRAS);
-            Parcelable[] extraLocations = getIntent()
-                    .getParcelableArrayExtra(START_LOCATION_EXTRAS);
-            for (Parcelable par : extraLocations) {
-                final Location loc = (Location) par;
-                final GeoPoint geopoint = new GeoPoint((int) (loc.getLatitude() * 1E6),
-                        (int) (loc.getLongitude() * 1E6));
-                listOfOverlays.add(new UserTouchedOverlayView(geopoint));
-
-            }
-        }
-
+        listOfOverlays.add(userTouchMapOverlay);
+        
         m_dataPickerEnableCheckbox
                 .setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
 
@@ -355,6 +347,33 @@ public class SunMapActivity extends MapActivity {
                         m_datePicker.setVisibility(isChecked ? View.VISIBLE : View.GONE);
                     }
                 });
+        
+        m_showBookmarksCheckbox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                final List<Overlay> listOfOverlays = m_mapView.getOverlays();
+                listOfOverlays.clear();
+                listOfOverlays.add(userTouchMapOverlay);
+                
+                if (isChecked && getIntent().hasExtra(START_LOCATION_BOOKMARKS)) {
+                    Log.i(TAG, "Found " + START_LOCATION_BOOKMARKS);
+                    Parcelable[] extraLocations = getIntent()
+                            .getParcelableArrayExtra(START_LOCATION_BOOKMARKS);
+                    for (Parcelable par : extraLocations) {
+                        final Location loc = (Location) par;
+                        final GeoPoint geopoint = new GeoPoint((int) (loc.getLatitude() * 1E6),
+                                (int) (loc.getLongitude() * 1E6));
+                        listOfOverlays.add(new UserTouchedOverlayView(geopoint));
+
+                    }
+                }
+                
+                m_mapView.invalidate();
+            }
+        });
+        
+        m_showBookmarksCheckbox.setChecked(getIntent().getBooleanExtra(SHOW_BOOKMARK_LOCATION, true));
 
         m_datePicker.getCalendarView().setOnDateChangeListener(
                 new CalendarView.OnDateChangeListener() {
