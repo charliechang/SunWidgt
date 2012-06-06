@@ -35,6 +35,9 @@
         <activity
             android:name=".activity.BookmarkListActivity"
             android:configChanges="keyboard|keyboardHidden|orientation|screenSize|smallestScreenSize" />
+        <activity
+            android:name=".activity.RainMapActivity"
+            android:configChanges="keyboard|keyboardHidden|orientation|screenSize|smallestScreenSize" />
     </application>
 
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />

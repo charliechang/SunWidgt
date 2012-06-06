@@ -22,6 +22,7 @@
     <string name="menuitem_title_location">Location</string>
     <string name="menuitem_title_bookmarks">Bookmarks</string>
     <string name="menuitem_title_calendar">Calendar</string>
+    <string name="menuitem_title_rain">Rain</string>
     <string name="map_bookmark">Bookmark</string>
     <string name="map_locating">Locating</string>
 	<string name="map_sunrise">Sunrise: </string>
@@ -36,4 +37,8 @@
 	<string name="bookmarklist_setdefault">Default</string>
 	<string name="map_datepicker_checkbox">Date</string>
 	<string name="map_show_bookmarks">Bookmarks</string>
+	<string name="progress_message">Loading</string>
+	<string name="progress_message_connecting">Connecting</string>
+	<string name="progress_message_handling">Handling</string>
+	<string name="progress_message_saving">Saving</string>
 </resources>

@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:padding="2dp"
+    android:id="@+id/map_relative_layout">
+    
+    <com.google.android.maps.MapView
+        android:id="@+id/mapview"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:apiKey="0aJCC5wONb-U4p_9b8cjaPuONBYXMGWpMKsBS7w"
+        android:clickable="true"
+        android:enabled="true" />
+
+        <ListView
+            android:id="@+id/rain_location_list"
+            android:layout_width="match_parent"
+            android:layout_height="150dp"
+            android:layout_alignLeft="@+id/mapview"
+            android:layout_alignTop="@+id/mapview"
+            android:focusable="false"
+            android:clickable="false"
+            android:background="#88FFFFFF"
+            android:cacheColorHint="#00000000" />
+    
+</RelativeLayout>

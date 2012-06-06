@@ -75,7 +75,7 @@ public class SunWidget extends AppWidgetProvider {
         final double lng = null == coarseLocation ? 121.453857 : coarseLocation.getLongitude();
         Log.d(TAG, "lat=" + lat + " lng=" + lng);
         
-        final SearchAddressTask getlocationTask = new SearchAddressTask(gencorder,lat,lng);
+        final SearchAddressTask getlocationTask = new SearchAddressTask(null,gencorder,lat,lng);
         getlocationTask.execute();
 
         SunriseSunset sunAnswer = null;

@@ -79,11 +79,6 @@ public class BookmarkFragment extends DialogFragment {
                         Log.i(TAG, "Empty address");
                     }
                     else {
-                        // Intent data = new Intent();
-                        // data.putExtra(SunMapActivity.LOCATION_ADDRESS,
-                        // address);
-                        // data.putExtra(SunMapActivity.START_LOCATION, loc);
-
                         // Save to bookmark according to index
                         Log.i(TAG, "Saving address=" + address + " loc=" + loc);
                         

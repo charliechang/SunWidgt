@@ -5,6 +5,11 @@ import java.text.DecimalFormat;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Timer;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
 
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -36,9 +41,10 @@ import android.widget.TextView;
 
 import com.bk.sunwidgt.SunWidget;
 import com.bk.sunwidgt.fragment.BookmarkFragment;
+import com.bk.sunwidgt.fragment.ProgressFragment;
 import com.bk.sunwidgt.lib.MoonCalculator;
 import com.bk.sunwidgt.lib.SunCalculator;
-import com.bk.sunwidgt.task.DelaySearchAddressTask;
+import com.bk.sunwidgt.task.SearchAddressTask;
 import com.google.android.maps.GeoPoint;
 import com.google.android.maps.MapActivity;
 import com.google.android.maps.MapController;
@@ -49,21 +55,26 @@ public class SunMapActivity extends MapActivity {
     public final static String START_LOCATION = SunMapActivity.class.getName() + ".start_location";
     public final static String START_LOCATION_BOOKMARKS = SunMapActivity.class.getName()
             + ".start_location_bookmarks";
-    public final static String SHOW_BOOKMARK_LOCATION = SunMapActivity.class.getName() + ".show_bookmakrs_location";
+    public final static String SHOW_BOOKMARK_LOCATION = SunMapActivity.class.getName()
+            + ".show_bookmakrs_location";
     public final static String SHOW_TIME = SunMapActivity.class.getName() + ".show_time";
     public final static String LOCATION_ADDRESS = SunMapActivity.class.getName()
             + ".location_address";
     public final static int DEFAULT_ZOOM_LEVEL = 10;
     public final static double DOUBLE_1E6 = 1E6;
     public final static int MESSAGE_SET_ADDRESS = 1;
-    public final static int MESSAGE_QUERY_ADDRESS = 2;
+    // public final static int MESSAGE_QUERY_ADDRESS = 2;
     public final static int MESSAGE_UPDTAE_MAPVIEW = 3;
-
+    public final static int MESSAGE_SHOW_PROGRESS = 4;
+    public final static int MESSAGE_SHOW_BOOKMARK = 5;
     private final static String TAG = SunMapActivity.class.getSimpleName();
     private final static String PERF_DATEPICKER_ENABLE = SunMapActivity.class.getName()
             + ".datepickerenable";
     private final static int CIRCLE_RADIOUS = 8;
-
+    
+    
+    private final static ExecutorService SINGLE_THREAD_EXECUTOR = Executors.newSingleThreadExecutor();
+    
     private final static DecimalFormat LATLNG_FORMATTER = new DecimalFormat("#.#####");
     private final static Paint REDPAINT = new Paint(Paint.ANTI_ALIAS_FLAG);
     private final static Paint BLUEPAINT = new Paint(Paint.ANTI_ALIAS_FLAG);
@@ -83,11 +94,11 @@ public class SunMapActivity extends MapActivity {
     private long m_showTime;
     private GeoPoint m_geopoint;
     private OptionMenuCreator m_menuCreator;
-
+    private ProgressFragment m_progressDialog;
     private DatePicker m_datePicker;
     private CheckBox m_dataPickerEnableCheckbox;
     private CheckBox m_showBookmarksCheckbox;
-    
+
     private RelativeLayout m_mainLayout;
 
     private Handler m_Handler = new Handler() {
@@ -109,17 +120,44 @@ public class SunMapActivity extends MapActivity {
                 m_addressView.setText(addressStringSB.toString());
 
                 m_bookmarkButton.setText(com.bk.sunwidgt.R.string.map_bookmark);
-                m_bookmarkButton.setEnabled(true);
+                // m_bookmarkButton.setEnabled(true);
 
             }
-            else if (MESSAGE_QUERY_ADDRESS == msg.what) {
+            // else if (MESSAGE_QUERY_ADDRESS == msg.what) {
 
-                m_bookmarkButton.setText(com.bk.sunwidgt.R.string.map_locating);
-                m_bookmarkButton.setEnabled(false);
-            }
+            // m_bookmarkButton.setText(com.bk.sunwidgt.R.string.map_locating);
+            // m_bookmarkButton.setEnabled(false);
+            // }
             else if (MESSAGE_UPDTAE_MAPVIEW == msg.what) {
                 Log.d(TAG, "mapview invalidate");
                 m_mapView.invalidate();
+            }
+            else if (MESSAGE_SHOW_PROGRESS == msg.what) {
+
+                if (null == m_progressDialog) {
+                    m_progressDialog = ProgressFragment.newInstance(
+                            com.bk.sunwidgt.R.string.progress_message);
+                }
+                m_progressDialog.show(getFragmentManager(), null);
+            }
+            else if (MESSAGE_SHOW_BOOKMARK == msg.what) {
+                if (m_progressDialog != null) {
+                    m_progressDialog.dismissAllowingStateLoss();
+                }
+
+                if (null == m_geopoint) {
+                    Log.d(TAG, "m_geopoint = null");
+                }
+                else {
+                    final Location loc = new Location(getClass().getName());
+                    loc.setLatitude((double) m_geopoint.getLatitudeE6() / DOUBLE_1E6);
+                    loc.setLongitude((double) m_geopoint.getLongitudeE6() / DOUBLE_1E6);
+                    BookmarkFragment dialog = BookmarkFragment.newInstance(loc, m_addressView
+                            .getText()
+                            .toString());
+                    dialog.show(getFragmentManager(), null);
+                }
+
             }
 
         }
@@ -137,8 +175,8 @@ public class SunMapActivity extends MapActivity {
         final private TextView m_sunsetTextview;
         final private TextView m_moonriseTextview;
         final private TextView m_moonsetTextview;
-        private RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(100, 100);
-        private Timer searchAddressTimer = new Timer();
+        private RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(150, 150);
+        // private Timer searchAddressTimer = new Timer();
         private GeoPoint geoPoint;
 
         public UserTouchedOverlayView() {
@@ -183,12 +221,12 @@ public class SunMapActivity extends MapActivity {
             cal.setTimeInMillis(m_showTime);
 
             final SunCalculator.SunriseSunset sunTime = SunCalculator.getSunriseSunset(cal,
-                    (double) m_geopoint.getLatitudeE6() / DOUBLE_1E6,
-                    (double) m_geopoint.getLongitudeE6() / DOUBLE_1E6, false);
+                    (double) (null == geoPoint ? m_geopoint.getLatitudeE6() : geoPoint.getLatitudeE6()) / DOUBLE_1E6,
+                    (double) (null == geoPoint ? m_geopoint.getLongitudeE6() : geoPoint.getLongitudeE6()) / DOUBLE_1E6, false);
 
             final MoonCalculator.MoonriseMoonset moonTime = MoonCalculator.getMoonriseMoonset(cal,
-                    (double) m_geopoint.getLatitudeE6() / 1E6,
-                    (double) m_geopoint.getLongitudeE6() / 1E6);
+                    (double) (null == geoPoint ? m_geopoint.getLatitudeE6() : geoPoint.getLatitudeE6()) / 1E6,
+                    (double) (null == geoPoint ? m_geopoint.getLongitudeE6() : geoPoint.getLongitudeE6()) / 1E6);
 
             m_mapDate.setText(SunWidget.fmtDate.format(cal.getTime()));
             m_sunriseTextview.setText(SunMapActivity.this.getResources().getString(
@@ -246,13 +284,14 @@ public class SunMapActivity extends MapActivity {
 
                 m_addressView.setText(latlngSB.toString());
 
-                if (searchAddressTimer != null) {
-                    searchAddressTimer.cancel();
-                }
-                searchAddressTimer = new Timer();
+                // if (searchAddressTimer != null) {
+                // searchAddressTimer.cancel();
+                // }
+                // searchAddressTimer = new Timer();
 
-                searchAddressTimer.schedule(new DelaySearchAddressTask(m_Handler, 8000L,
-                        m_geocoder, lat, lng), 1000L);
+                // searchAddressTimer.schedule(new
+                // DelaySearchAddressTask(m_Handler, 8000L,
+                // m_geocoder, lat, lng), 1000L);
 
             }
 
@@ -278,7 +317,7 @@ public class SunMapActivity extends MapActivity {
         m_datePicker = (DatePicker) findViewById(com.bk.sunwidgt.R.id.map_datepicker);
 
         m_mainLayout = (RelativeLayout) findViewById(com.bk.sunwidgt.R.id.map_relative_layout);
-        
+
         m_showBookmarksCheckbox = (CheckBox) findViewById(com.bk.sunwidgt.R.id.map_showbookmarks_checkbox);
 
         // Retrieve start location
@@ -334,11 +373,11 @@ public class SunMapActivity extends MapActivity {
 
         // Add time layer
         final UserTouchedOverlayView userTouchMapOverlay = new UserTouchedOverlayView();
-        
+
         List<Overlay> listOfOverlays = m_mapView.getOverlays();
         listOfOverlays.clear();
         listOfOverlays.add(userTouchMapOverlay);
-        
+
         m_dataPickerEnableCheckbox
                 .setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
 
@@ -347,33 +386,36 @@ public class SunMapActivity extends MapActivity {
                         m_datePicker.setVisibility(isChecked ? View.VISIBLE : View.GONE);
                     }
                 });
-        
-        m_showBookmarksCheckbox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                final List<Overlay> listOfOverlays = m_mapView.getOverlays();
-                listOfOverlays.clear();
-                listOfOverlays.add(userTouchMapOverlay);
-                
-                if (isChecked && getIntent().hasExtra(START_LOCATION_BOOKMARKS)) {
-                    Log.i(TAG, "Found " + START_LOCATION_BOOKMARKS);
-                    Parcelable[] extraLocations = getIntent()
-                            .getParcelableArrayExtra(START_LOCATION_BOOKMARKS);
-                    for (Parcelable par : extraLocations) {
-                        final Location loc = (Location) par;
-                        final GeoPoint geopoint = new GeoPoint((int) (loc.getLatitude() * 1E6),
-                                (int) (loc.getLongitude() * 1E6));
-                        listOfOverlays.add(new UserTouchedOverlayView(geopoint));
 
+        m_showBookmarksCheckbox
+                .setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+
+                    @Override
+                    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                        final List<Overlay> listOfOverlays = m_mapView.getOverlays();
+                        listOfOverlays.clear();
+                        listOfOverlays.add(userTouchMapOverlay);
+
+                        if (isChecked && getIntent().hasExtra(START_LOCATION_BOOKMARKS)) {
+                            Log.i(TAG, "Found " + START_LOCATION_BOOKMARKS);
+                            Parcelable[] extraLocations = getIntent()
+                                    .getParcelableArrayExtra(START_LOCATION_BOOKMARKS);
+                            for (Parcelable par : extraLocations) {
+                                final Location loc = (Location) par;
+                                final GeoPoint geopoint = new GeoPoint(
+                                        (int) (loc.getLatitude() * 1E6),
+                                        (int) (loc.getLongitude() * 1E6));
+                                listOfOverlays.add(new UserTouchedOverlayView(geopoint));
+
+                            }
+                        }
+
+                        m_mapView.invalidate();
                     }
-                }
-                
-                m_mapView.invalidate();
-            }
-        });
-        
-        m_showBookmarksCheckbox.setChecked(getIntent().getBooleanExtra(SHOW_BOOKMARK_LOCATION, true));
+                });
+
+        m_showBookmarksCheckbox.setChecked(getIntent()
+                .getBooleanExtra(SHOW_BOOKMARK_LOCATION, true));
 
         m_datePicker.getCalendarView().setOnDateChangeListener(
                 new CalendarView.OnDateChangeListener() {
@@ -401,10 +443,10 @@ public class SunMapActivity extends MapActivity {
             final Location loc = new Location(getClass().getName());
             loc.setLatitude((double) m_geopoint.getLatitudeE6() / DOUBLE_1E6);
             loc.setLongitude((double) m_geopoint.getLongitudeE6() / DOUBLE_1E6);
-
-            BookmarkFragment dialog = BookmarkFragment.newInstance(loc, m_addressView.getText()
-                    .toString());
-            dialog.show(getFragmentManager(), null);
+            final SearchAddressTask searchTask = new SearchAddressTask(m_Handler, m_geocoder,
+                    loc.getLatitude(), loc.getLongitude());
+            
+            searchTask.executeOnExecutor(SINGLE_THREAD_EXECUTOR);
         }
     }
 

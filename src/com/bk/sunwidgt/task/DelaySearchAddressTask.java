@@ -15,6 +15,7 @@ import android.location.Geocoder;
 import android.os.Handler;
 import android.util.Log;
 
+@Deprecated
 public class DelaySearchAddressTask extends TimerTask {
     private final static String TAG = "Sun" + DelaySearchAddressTask.class.getSimpleName();
     private final static Executor SINGLE_THEEAD_EXECUTOR = Executors.newSingleThreadExecutor();
@@ -26,7 +27,7 @@ public class DelaySearchAddressTask extends TimerTask {
             double lat, double lng) {
         super();
 
-        mSearchTask = new SearchAddressTask(gencorder, lat, lng);
+        mSearchTask = new SearchAddressTask(handler,gencorder, lat, lng);
         m_timeoutInMS = timeoutInMS;
         m_handler = handler;
     }
@@ -35,7 +36,7 @@ public class DelaySearchAddressTask extends TimerTask {
         Log.d(TAG, "Running " + this);
         mSearchTask.executeOnExecutor(SINGLE_THEEAD_EXECUTOR);
         
-        m_handler.obtainMessage(SunMapActivity.MESSAGE_QUERY_ADDRESS).sendToTarget();
+        //m_handler.obtainMessage(SunMapActivity.MESSAGE_QUERY_ADDRESS).sendToTarget();
         
         Address address = null;
         try {

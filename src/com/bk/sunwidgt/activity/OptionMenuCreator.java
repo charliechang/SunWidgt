@@ -14,11 +14,13 @@ public class OptionMenuCreator {
     private final static int MENUITEM_CALENDAR_ID = 0;
     private final static int MENUITEM_BOOKMARKLIST_ID = 1;
     private final static int MENUITEM_MAP_ID = 2;
+    private final static int MENUITEM_RAIN_LOCATION_ID = 3;
     
     public boolean onCreateOptionsMenu(Menu menu) {
         menu.add(0, MENUITEM_CALENDAR_ID, MENUITEM_CALENDAR_ID, com.bk.sunwidgt.R.string.menuitem_title_calendar);
         menu.add(0, MENUITEM_BOOKMARKLIST_ID, MENUITEM_BOOKMARKLIST_ID, com.bk.sunwidgt.R.string.menuitem_title_bookmarks);
         menu.add(0, MENUITEM_MAP_ID, MENUITEM_MAP_ID, com.bk.sunwidgt.R.string.menuitem_title_location);
+        menu.add(0, MENUITEM_RAIN_LOCATION_ID, MENUITEM_RAIN_LOCATION_ID, com.bk.sunwidgt.R.string.menuitem_title_rain);
         
         return true;
     }
@@ -43,6 +45,9 @@ public class OptionMenuCreator {
                     activityIntent.putExtra(SunMapActivity.START_LOCATION_BOOKMARKS, BookmarkStoreUtil.tolocationParcelableArray(locData));
                 }
                 
+                break;
+            case MENUITEM_RAIN_LOCATION_ID:
+                activityIntent = new Intent(context,RainMapActivity.class);
                 break;
             default:
                 Log.w(TAG, "Unable to handle item id=" + item.getItemId());
