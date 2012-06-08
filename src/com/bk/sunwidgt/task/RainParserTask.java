@@ -76,6 +76,10 @@ public class RainParserTask extends AsyncTask<Void,Void,Void>{
         else {
             
             Log.i(TAG, "Perference expire");
+            
+            if(m_handler != null) {
+                m_handler.obtainMessage(RainMapActivity.MESSAGE_LOAD_RAINDATA).sendToTarget();
+            }
     
             CleanerProperties props = new CleanerProperties();
     
