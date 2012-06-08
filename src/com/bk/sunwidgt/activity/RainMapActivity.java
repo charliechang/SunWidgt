@@ -49,10 +49,11 @@ public class RainMapActivity extends MapActivity{
     private final static String TAG = "Sun" + RainMapActivity.class.getSimpleName();
     
     public final static int MESSAGE_SHOW_PROGRESS = 4;
-    public final static int MESSAGE_CLOSE_PROGRESS = 8;
     public final static int MESSAGE_LOAD_RAINDATA = 5;
     public final static int MESSAGE_SET_CENTER = 6;
     public final static int MESSAGE_SET_PROGRESS_MESSAGE = 7;
+    public final static int MESSAGE_CLOSE_PROGRESS = 8;
+    public final static int MESSAGE_SET_UPDATE_STATUS = 9;
     
     public final static double DOUBLE_1E6 = 1E6;
     private final static int CIRCLE_RADIOUS = 2;
@@ -75,7 +76,7 @@ public class RainMapActivity extends MapActivity{
     private MapView m_mapView;
     private RelativeLayout m_mainLayout;
     private OptionMenuCreator m_menuCreator;
-    
+    private TextView m_updateStatusView;
     private Handler m_Handler = new Handler() {
 
         public void handleMessage(Message msg) {
@@ -116,13 +117,16 @@ public class RainMapActivity extends MapActivity{
                         m_progressDialog = ProgressFragment.newInstance(
                                 com.bk.sunwidgt.R.string.progress_message);
                     }
-                    m_progressDialog.setMessage(msg.obj.toString());
+                    m_progressDialog.setMessage((String) msg.obj);
                     
                 }
                 else if(MESSAGE_CLOSE_PROGRESS == msg.what) {
                     if(m_progressDialog != null) {
                         m_progressDialog.dismissAllowingStateLoss();
                     }
+                }
+                else if(MESSAGE_SET_UPDATE_STATUS == msg.what) {
+                    m_updateStatusView.setText((String) msg.obj);
                 }
         
             }
@@ -236,7 +240,7 @@ public class RainMapActivity extends MapActivity{
         m_mapView = (MapView) findViewById(com.bk.sunwidgt.R.id.mapview);
         m_mapController = m_mapView.getController();
         m_mainLayout = (RelativeLayout) findViewById(com.bk.sunwidgt.R.id.map_relative_layout);
-        
+        m_updateStatusView = (TextView) findViewById(com.bk.sunwidgt.R.id.rain_update_status);
         // Add time layer
         final UserTouchedOverlayView userTouchMapOverlay = new UserTouchedOverlayView();
 

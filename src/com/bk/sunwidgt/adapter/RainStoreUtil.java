@@ -50,13 +50,18 @@ public class RainStoreUtil {
     
     public final static SimpleDateFormat fmtDateTime = new SimpleDateFormat("yyyy MM/dd HH:mm");
     
+    public static long getLastUpdateTimeInMS(Context context) {
+        final SharedPreferences perf = context.getSharedPreferences(RAIN_LOCATION_NAME,Context.MODE_PRIVATE);
+        return perf.getLong(RAIN_UPDATE_TIME, 0L);
+    }
+    
     public static boolean isPerfExpire(Context context) {
         final SharedPreferences perf = context.getSharedPreferences(RAIN_LOCATION_NAME,Context.MODE_PRIVATE);
         final int year = perf.getInt(KEY_LOCATION_YEAR, 1900);
         final int month = perf.getInt(KEY_LOCATION_MONTH, 0);
         final int day = perf.getInt(KEY_LOCATION_DAY, 0);
         final int start_hour = perf.getInt(KEY_LOCATION_START_HOUR, 0);
-        final long updateTime = perf.getLong(RAIN_UPDATE_TIME, 0L);
+        final long updateTime = getLastUpdateTimeInMS(context);
         
         final Calendar perfTime = Calendar.getInstance();
         final long currentTimeInMS = perfTime.getTimeInMillis();

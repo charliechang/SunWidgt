@@ -23,5 +23,16 @@
             android:clickable="false"
             android:background="#88FFFFFF"
             android:cacheColorHint="#00000000" />
+        
+       <TextView
+        android:id="@+id/rain_update_status"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerInParent="true"
+        android:background="#88FFFFFF"
+        android:singleLine="false"
+        android:textColor="#000000"
+        android:textSize="14sp" />
     
 </RelativeLayout>

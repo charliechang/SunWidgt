@@ -2,7 +2,9 @@ package com.bk.sunwidgt.task;
 
 import java.io.IOException;
 import java.net.URL;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -25,7 +27,7 @@ import android.util.Log;
 public class RainParserTask extends AsyncTask<Void,Void,Void>{
     public final static String TAG = "Sun" + RainParserTask.class.getSimpleName();
     public final static String LOCATION_FILE_PREFIX = RainParserTask.class.getName() + ".";
-
+    private final static SimpleDateFormat fmtDateTime = new SimpleDateFormat("MM/dd HH:mm");
     protected final Pattern titleDatePattern = Pattern.compile("(\\d{1,2})/(\\d{1,2})(\\d{2})\u2193(\\d{2})");
     protected final Pattern titleHourPattern = Pattern.compile("(\\d{2})\u2193(\\d{2})");
     
@@ -35,6 +37,7 @@ public class RainParserTask extends AsyncTask<Void,Void,Void>{
     protected final String m_progressConnectingMsg;
     protected final String m_progressHandlingMsg;
     protected final String m_progressSavingMsg;
+    protected final String m_progressUpdateStatus;
     
     public RainParserTask(Context context, URL url,Handler handler) {
         super();
@@ -45,6 +48,7 @@ public class RainParserTask extends AsyncTask<Void,Void,Void>{
         m_progressConnectingMsg = context.getString(com.bk.sunwidgt.R.string.progress_message_connecting);
         m_progressHandlingMsg = context.getString(com.bk.sunwidgt.R.string.progress_message_handling);
         m_progressSavingMsg = context.getString(com.bk.sunwidgt.R.string.progress_message_saving);
+        m_progressUpdateStatus = context.getString(com.bk.sunwidgt.R.string.progress_message_last_update);
     }
 
 
@@ -52,9 +56,15 @@ public class RainParserTask extends AsyncTask<Void,Void,Void>{
     protected Void doInBackground(Void... arg0) {
         Log.d(TAG, "doInBackground");
         
-        if(m_handler != null) {
-            m_handler.obtainMessage(RainMapActivity.MESSAGE_SHOW_PROGRESS).sendToTarget();
-        }
+        //if(m_handler != null) {
+            //m_handler.obtainMessage(RainMapActivity.MESSAGE_SHOW_PROGRESS).sendToTarget();
+        //    final long lastUpdateTimeInMS = RainStoreUtil.getLastUpdateTimeInMS(m_context);
+        //    if(lastUpdateTimeInMS > 0L) {
+        //        final Calendar cal = Calendar.getInstance();
+        //        cal.setTimeInMillis(lastUpdateTimeInMS);
+        //        m_handler.obtainMessage(RainMapActivity.MESSAGE_SET_UPDATE_STATUS, m_progressUpdateStatus+ " " + fmtDateTime.format(cal.getTime())).sendToTarget();
+        //    }
+        //}
 
         
         if(!RainStoreUtil.isPerfExpire(m_context)) {
@@ -77,7 +87,8 @@ public class RainParserTask extends AsyncTask<Void,Void,Void>{
             // do parsing
             //final URL url = RainParser.class.getResource("22.htm");
             try {
-                m_handler.obtainMessage(RainMapActivity.MESSAGE_SET_PROGRESS_MESSAGE,m_progressConnectingMsg).sendToTarget();
+                //m_handler.obtainMessage(RainMapActivity.MESSAGE_SET_PROGRESS_MESSAGE,m_progressConnectingMsg).sendToTarget();
+                m_handler.obtainMessage(RainMapActivity.MESSAGE_SET_UPDATE_STATUS,m_progressConnectingMsg).sendToTarget();
                 final TagNode node = new HtmlCleaner(props).clean(m_url);
                 
                 
@@ -129,7 +140,8 @@ public class RainParserTask extends AsyncTask<Void,Void,Void>{
                                                     rowTitleListRainInfromation.add(new RainInformation());
                                                 }
                                                 else {
-                                                    m_handler.obtainMessage(RainMapActivity.MESSAGE_SET_PROGRESS_MESSAGE,m_progressHandlingMsg + " " + rawData).sendToTarget();
+                                                    //m_handler.obtainMessage(RainMapActivity.MESSAGE_SET_PROGRESS_MESSAGE,m_progressHandlingMsg + " " + rawData).sendToTarget();
+                                                    m_handler.obtainMessage(RainMapActivity.MESSAGE_SET_UPDATE_STATUS,m_progressHandlingMsg + " " + rawData).sendToTarget();
                                                     rowTitleListRainInfromation.add(new RainInformation(rawData));
                                                 }
                                                 
@@ -173,7 +185,7 @@ public class RainParserTask extends AsyncTask<Void,Void,Void>{
                     
                 }
                 */
-                m_handler.obtainMessage(RainMapActivity.MESSAGE_SET_PROGRESS_MESSAGE,m_progressSavingMsg).sendToTarget();
+                //m_handler.obtainMessage(RainMapActivity.MESSAGE_SET_PROGRESS_MESSAGE,m_progressSavingMsg).sendToTarget();
                 RainStoreUtil.saveRains(m_context, rainInformatinoArray);
                 
                 if(m_handler != null) {
@@ -186,8 +198,17 @@ public class RainParserTask extends AsyncTask<Void,Void,Void>{
             }
         }
         
+        //if(m_handler != null) {
+        //    m_handler.obtainMessage(RainMapActivity.MESSAGE_CLOSE_PROGRESS).sendToTarget();
+        //}
         if(m_handler != null) {
-            m_handler.obtainMessage(RainMapActivity.MESSAGE_CLOSE_PROGRESS).sendToTarget();
+            //m_handler.obtainMessage(RainMapActivity.MESSAGE_SHOW_PROGRESS).sendToTarget();
+            final long lastUpdateTimeInMS = RainStoreUtil.getLastUpdateTimeInMS(m_context);
+            if(lastUpdateTimeInMS > 0L) {
+                final Calendar cal = Calendar.getInstance();
+                cal.setTimeInMillis(lastUpdateTimeInMS);
+                m_handler.obtainMessage(RainMapActivity.MESSAGE_SET_UPDATE_STATUS, m_progressUpdateStatus+ " " + fmtDateTime.format(cal.getTime())).sendToTarget();
+            }
         }
         
         return null;

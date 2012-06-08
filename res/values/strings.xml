@@ -41,4 +41,5 @@
 	<string name="progress_message_connecting">Connecting</string>
 	<string name="progress_message_handling">Handling</string>
 	<string name="progress_message_saving">Saving</string>
+	<string name="progress_message_last_update">Last Update</string>
 </resources>
