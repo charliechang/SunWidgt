@@ -15,13 +15,14 @@ public class OptionMenuCreator {
     private final static int MENUITEM_BOOKMARKLIST_ID = 1;
     private final static int MENUITEM_MAP_ID = 2;
     private final static int MENUITEM_RAIN_LOCATION_ID = 3;
+    private final static int MENUITEM_TIDE_ID = 4;
     
     public boolean onCreateOptionsMenu(Menu menu) {
         menu.add(0, MENUITEM_CALENDAR_ID, MENUITEM_CALENDAR_ID, com.bk.sunwidgt.R.string.menuitem_title_calendar);
         menu.add(0, MENUITEM_BOOKMARKLIST_ID, MENUITEM_BOOKMARKLIST_ID, com.bk.sunwidgt.R.string.menuitem_title_bookmarks);
         menu.add(0, MENUITEM_MAP_ID, MENUITEM_MAP_ID, com.bk.sunwidgt.R.string.menuitem_title_location);
         menu.add(0, MENUITEM_RAIN_LOCATION_ID, MENUITEM_RAIN_LOCATION_ID, com.bk.sunwidgt.R.string.menuitem_title_rain);
-        
+        menu.add(0, MENUITEM_TIDE_ID, MENUITEM_TIDE_ID, com.bk.sunwidgt.R.string.menuitem_title_tide);
         return true;
     }
     
@@ -48,6 +49,9 @@ public class OptionMenuCreator {
                 break;
             case MENUITEM_RAIN_LOCATION_ID:
                 activityIntent = new Intent(context,RainMapActivity.class);
+                break;
+            case MENUITEM_TIDE_ID:    
+                activityIntent = new Intent(context,TideMapActivity.class);
                 break;
             default:
                 Log.w(TAG, "Unable to handle item id=" + item.getItemId());

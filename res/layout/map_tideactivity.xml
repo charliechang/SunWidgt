@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:padding="2dp"
+    android:id="@+id/map_relative_layout">
+    
+    <com.google.android.maps.MapView
+        android:id="@+id/mapview"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:apiKey="0aJCC5wONb-U4p_9b8cjaPuONBYXMGWpMKsBS7w"
+        android:clickable="true"
+        android:enabled="true" />
+    <DatePicker
+        android:id="@+id/map_datepicker"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:endYear="2100"
+        android:startYear="2011"
+        android:visibility="gone" />
+    <CheckBox
+        android:id="@+id/map_datepicker_checkbox"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+		android:layout_alignParentLeft="true"
+        android:layout_alignParentBottom="true" />
+    
+       <TextView
+        android:id="@+id/tide_update_status"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerInParent="true"
+        android:background="#88FFFFFF"
+        android:singleLine="false"
+        android:textColor="#000000"
+        android:textSize="14sp" />
+    
+</RelativeLayout>

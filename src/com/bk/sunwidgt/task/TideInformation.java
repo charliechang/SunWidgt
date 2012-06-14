@@ -2,11 +2,11 @@ package com.bk.sunwidgt.task;
 
 public class TideInformation {
     public final static int NOSET_INT = -1;
-    final int month;
-    final int day_of_month;
-    final int hours;
-    final int mins;
-    final int tide_height;
+    public final int month;
+    public final int day_of_month;
+    public final int hours;
+    public final int mins;
+    public final int tide_height;
     
     public TideInformation(int month,int day_of_month,int hours,int mins,int tide_height) {
         this.month = month;

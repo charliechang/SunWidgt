@@ -23,6 +23,7 @@
     <string name="menuitem_title_bookmarks">Bookmarks</string>
     <string name="menuitem_title_calendar">Calendar</string>
     <string name="menuitem_title_rain">Rain</string>
+    <string name="menuitem_title_tide">Tide</string>
     <string name="map_bookmark">Bookmark</string>
     <string name="map_locating">Locating</string>
 	<string name="map_sunrise">Sunrise: </string>
