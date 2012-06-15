@@ -231,10 +231,10 @@ public class SunMapActivity extends MapActivity {
             m_mapDate.setText(SunWidget.fmtDate.format(cal.getTime()));
             m_sunriseTextview.setText(SunMapActivity.this.getResources().getString(
                     com.bk.sunwidgt.R.string.map_sunrise)
-                    + SunWidget.fmtTime.format(sunTime.sunrise));
+                    + SunWidget.fmtTime.format(sunTime.sunrise) + " " + String.valueOf(Math.round(sunTime.sunrise_azel)));
             m_sunsetTextview.setText(SunMapActivity.this.getResources().getString(
                     com.bk.sunwidgt.R.string.map_sunset)
-                    + SunWidget.fmtTime.format(sunTime.sunset));
+                    + SunWidget.fmtTime.format(sunTime.sunset) + " " + String.valueOf(Math.round(sunTime.sunset_azel)));
             if (null == moonTime.moonrise) {
                 m_moonriseTextview.setText(SunMapActivity.this.getResources().getString(
                         com.bk.sunwidgt.R.string.map_moonrise)
@@ -243,7 +243,7 @@ public class SunMapActivity extends MapActivity {
             else {
                 m_moonriseTextview.setText(SunMapActivity.this.getResources().getString(
                         com.bk.sunwidgt.R.string.map_moonrise)
-                        + SunWidget.fmtTime.format(moonTime.moonrise));
+                        + SunWidget.fmtTime.format(moonTime.moonrise) + " " + String.valueOf(Math.round(moonTime.rise_az)));
             }
 
             if (null == moonTime.moonset) {
@@ -254,7 +254,7 @@ public class SunMapActivity extends MapActivity {
             else {
                 m_moonsetTextview.setText(SunMapActivity.this.getResources().getString(
                         com.bk.sunwidgt.R.string.map_moonset)
-                        + SunWidget.fmtTime.format(moonTime.moonset));
+                        + SunWidget.fmtTime.format(moonTime.moonset) + " "+ String.valueOf(Math.round(moonTime.set_sz)));
             }
 
             // Bitmap timeTextViewBitmap = m_timeView.getDrawingCache();
@@ -263,10 +263,14 @@ public class SunMapActivity extends MapActivity {
 
             params.leftMargin = (int) x;
             params.topMargin = (int) y;
-            m_mainLayout.removeView(m_timeView);
+            removeViewFromMainLayout();
             m_mainLayout.addView(m_timeView, params);
 
             return true;
+        }
+        
+        public void removeViewFromMainLayout() {
+            m_mainLayout.removeView(m_timeView);
         }
 
         @Override
@@ -393,6 +397,13 @@ public class SunMapActivity extends MapActivity {
                     @Override
                     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                         final List<Overlay> listOfOverlays = m_mapView.getOverlays();
+                        
+                        for(Overlay overlay : listOfOverlays) {
+                            if(UserTouchedOverlayView.class.isInstance(overlay)) {
+                                ((UserTouchedOverlayView) overlay).removeViewFromMainLayout();
+                            }
+                        }
+                        
                         listOfOverlays.clear();
                         listOfOverlays.add(userTouchMapOverlay);
 
