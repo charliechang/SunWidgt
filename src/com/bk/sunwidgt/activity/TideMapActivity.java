@@ -10,6 +10,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.TreeSet;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -56,7 +57,7 @@ public class TideMapActivity extends MapActivity{
     
     public final static int DEFAULT_ZOOM_LEVEL = 8;
 
-    private final static ExecutorService FIX_THREAD_EXECUTOR = Executors.newFixedThreadPool(5);
+    private final static ExecutorService FIX_THREAD_EXECUTOR = Executors.newFixedThreadPool(1);
     private final static int CIRCLE_RADIOUS = 6;
     private final static SimpleDateFormat fmtTideDate = new SimpleDateFormat("MM/dd");
     private final static SimpleDateFormat fmtTideTime = new SimpleDateFormat("HH:mm");
@@ -76,7 +77,7 @@ public class TideMapActivity extends MapActivity{
     private OptionMenuCreator m_menuCreator;
     
     static {
-        BLACKPAINT.setColor(Color.BLACK);
+        BLACKPAINT.setColor(Color.DKGRAY);
         BLACKPAINT.setAlpha(128);
         REDPAINT.setColor(Color.RED);
         REDPAINT.setAlpha(128);
@@ -150,9 +151,10 @@ public class TideMapActivity extends MapActivity{
                         final Map<Long,Integer> heightMap = selectedData.getHeights(cal.getTime());
             
                         if(heightMap != null) {
-                            for(Entry<Long,Integer> tideTimeEntry : heightMap.entrySet()) {
-                                cal.setTimeInMillis(tideTimeEntry.getKey());
-                                m_tideTimeAdapter.add(fmtTideTime.format(cal.getTime()) + " " + tideTimeEntry.getValue());
+                            for(Long timeKey : new TreeSet<Long>(heightMap.keySet())) {
+                                
+                                cal.setTimeInMillis(timeKey);
+                                m_tideTimeAdapter.add(fmtTideTime.format(cal.getTime()) + " " + heightMap.get(timeKey));
                             }
                         }
                     }
