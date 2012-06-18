@@ -45,14 +45,14 @@ public class TideStoreUtil {
     }
     
     public static boolean isPerfExpire(Context context,String tideLocation) {
-        final String locationFileName = TIDE_LOCATION_PREFIX + tideLocation;
-        final SharedPreferences perf = context.getSharedPreferences(locationFileName,Context.MODE_PRIVATE);
-        final String[] dateKeys = perf.getString(TIDE_DATES,"").split(SEPERATOR);
-        if(0 == dateKeys.length) {
-            return true;
-        }
-        else {
-            
+        //final String locationFileName = TIDE_LOCATION_PREFIX + tideLocation;
+        //final SharedPreferences perf = context.getSharedPreferences(locationFileName,Context.MODE_PRIVATE);
+        //final String[] dateKeys = perf.getString(TIDE_DATES,"").split(SEPERATOR);
+        //if(0 == dateKeys.length) {
+        //    return true;
+        //}
+        //else {
+            /*
             String maxDate = dateKeys[0];
             for(int i = 1;i < dateKeys.length;i++) {
                 if(String.CASE_INSENSITIVE_ORDER.compare(maxDate, dateKeys[i]) < 0) {
@@ -71,13 +71,15 @@ public class TideStoreUtil {
                 catch(Exception e) {}
                 
             }
+            */
             //Show debug message
             final Calendar cal = Calendar.getInstance();
-            cal.setTimeInMillis(maxTime);
-            Log.i(TAG, "maxtime=" + fmtDateTime.format(cal.getTime()));
+            final long lastUpdateTimeInMS = getLastUpdateTimeInMS(context,tideLocation);
+            cal.setTimeInMillis(lastUpdateTimeInMS);
+            Log.i(TAG, "lastUpdateTimeInMS=" + fmtDateTime.format(cal.getTime()));
 
-            return Calendar.getInstance().getTimeInMillis() - maxTime > 24L * 60L * 60L * 1000L; //Fetch tide 1 day
-        }
+            return Calendar.getInstance().getTimeInMillis() - lastUpdateTimeInMS > 24L * 60L * 60L * 1000L; //Fetch tide 1 day
+        //}
         
     }
 
