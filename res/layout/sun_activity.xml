@@ -4,10 +4,11 @@
     android:layout_height="fill_parent"
     android:orientation="vertical" >
 
-    <fragment
-        android:id="@+id/sun_fragment"
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        class="com.bk.sunwidgt.fragment.SunFragment" />
+    <android.support.v4.view.ViewPager
+        android:id="@+id/sun_time_pager"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" >
+    </android.support.v4.view.ViewPager>
+
 
 </LinearLayout>

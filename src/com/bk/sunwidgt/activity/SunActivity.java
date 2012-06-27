@@ -1,9 +1,12 @@
 
 package com.bk.sunwidgt.activity;
 
+import com.bk.sunwidgt.adapter.SunFragmentAdapter;
+
 import android.app.Activity;
 import android.content.res.Configuration;
 import android.os.Bundle;
+import android.support.v4.view.ViewPager;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -12,7 +15,7 @@ import android.view.Window;
 public class SunActivity extends Activity {
     private final static String TAG = SunActivity.class.getSimpleName();
     private OptionMenuCreator m_menuCreator;
-
+    private ViewPager m_viewPager;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         Log.d(TAG, "onCreate");
@@ -20,7 +23,11 @@ public class SunActivity extends Activity {
 
         requestWindowFeature(Window.FEATURE_ACTION_BAR_OVERLAY);
         setContentView(com.bk.sunwidgt.R.layout.sun_activity);
-
+        
+        m_viewPager = (ViewPager) findViewById(com.bk.sunwidgt.R.id.sun_time_pager);
+        m_viewPager.setAdapter(new SunFragmentAdapter(getFragmentManager()));
+        m_viewPager.setCurrentItem(SunFragmentAdapter.MONTH_RANGE);
+        
     }
 
     @Override

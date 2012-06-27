@@ -37,9 +37,9 @@ import com.bk.sunwidgt.lib.SunCalculator;
 
 public class SunFragment extends Fragment {
     private final static String TAG = SunFragment.class.getSimpleName();
-
+    private final static String CALENDAR_TIME = SunFragment.class.getName() + ".CALENDAR_TIME";
     private LocationManager m_locManager;
-    private GestureLibrary m_gestureLib;
+ /*   private GestureLibrary m_gestureLib;
 
     private Runnable m_nextMonthRunnable = new Runnable() {
 
@@ -58,12 +58,20 @@ public class SunFragment extends Fragment {
         }
 
     };
-
+*/
+    
+    public static SunFragment newInstance(long calendarTime) {
+        final SunFragment fragment = new SunFragment();
+        final Bundle b = new Bundle();
+        b.putLong(CALENDAR_TIME, calendarTime);
+        fragment.setArguments(b);
+        return fragment;
+    }
+    
     @Override
     public void onCreate(Bundle savedInstanceState) {
         // mLogger.logMethodName();
         super.onCreate(savedInstanceState);
-
         m_locManager = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
     }
 
@@ -73,6 +81,13 @@ public class SunFragment extends Fragment {
         final View view = inflater.inflate(com.bk.sunwidgt.R.layout.sun_fragment, container, false);
         final CalendarView calendarView = (CalendarView) view
                 .findViewById(com.bk.sunwidgt.R.id.calendar);
+        
+        final long calendarTime = getArguments() != null ? getArguments().getLong(CALENDAR_TIME, 0L) : 0L;
+        if(calendarTime > 0) {
+            calendarView.setDate(calendarTime,false,true);
+        }
+        
+        /*
         calendarView.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
 
             @Override
@@ -81,6 +96,7 @@ public class SunFragment extends Fragment {
 
             }
         });
+        */
         /*
          * calendarView.setOnTouchListener(new View.OnTouchListener() {
          * @Override public boolean onTouch(View view, MotionEvent event) {
@@ -103,6 +119,9 @@ public class SunFragment extends Fragment {
             }
 
         });
+        
+        return view;
+        /*
         final GestureOverlayView gestureOverlayView = new GestureOverlayView(getActivity());
 
         gestureOverlayView.addView(view);
@@ -143,6 +162,7 @@ public class SunFragment extends Fragment {
 
         }
         return gestureOverlayView;
+        */
     }
 
     private void setWeektable() {
