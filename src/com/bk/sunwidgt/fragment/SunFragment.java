@@ -87,7 +87,7 @@ public class SunFragment extends Fragment {
             calendarView.setDate(calendarTime,false,true);
         }
         
-        /*
+        
         calendarView.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
 
             @Override
@@ -96,7 +96,7 @@ public class SunFragment extends Fragment {
 
             }
         });
-        */
+        
         /*
          * calendarView.setOnTouchListener(new View.OnTouchListener() {
          * @Override public boolean onTouch(View view, MotionEvent event) {
