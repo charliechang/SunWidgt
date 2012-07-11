@@ -38,8 +38,11 @@
         <activity
             android:name=".activity.RainMapActivity"
             android:configChanges="keyboard|keyboardHidden|orientation|screenSize|smallestScreenSize" />
-                <activity
+        <activity
             android:name=".activity.TideMapActivity"
+            android:configChanges="keyboard|keyboardHidden|orientation|screenSize|smallestScreenSize" />
+        <activity
+            android:name=".activity.CompassActivity"
             android:configChanges="keyboard|keyboardHidden|orientation|screenSize|smallestScreenSize" />
     </application>
 

@@ -13,6 +13,10 @@
     <string name="sunset">▼</string>
     <string name="moonrise">▲</string>
     <string name="moonset">▼</string>
+    <string name="compass_sunrise">Sunrise</string>
+    <string name="compass_sunset">Sunset</string>
+    <string name="compass_moonrise">Moonrise</string>
+    <string name="compass_moonset">Moonset</string>
     <string name="nextmonth">Next</string>
     <string name="prevmonth">Previous</string>
     <string name="refrshing">Refreshing</string>
@@ -24,6 +28,7 @@
     <string name="menuitem_title_calendar">Calendar</string>
     <string name="menuitem_title_rain">Rain</string>
     <string name="menuitem_title_tide">Tide</string>
+    <string name="menuitem_title_compass">Compass</string>
     <string name="map_bookmark">Bookmark</string>
     <string name="map_locating">Locating</string>
 	<string name="map_sunrise">Sunrise: </string>

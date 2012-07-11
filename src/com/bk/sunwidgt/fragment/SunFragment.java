@@ -6,6 +6,7 @@ import java.util.Calendar;
 
 import android.app.Fragment;
 import android.content.Context;
+import android.content.Intent;
 import android.gesture.Gesture;
 import android.gesture.GestureLibraries;
 import android.gesture.GestureLibrary;
@@ -31,6 +32,7 @@ import android.widget.TableRow;
 import android.widget.TextView;
 
 import com.bk.sunwidgt.SunWidget;
+import com.bk.sunwidgt.activity.CompassActivity;
 import com.bk.sunwidgt.adapter.LocationAdapter;
 import com.bk.sunwidgt.lib.MoonCalculator;
 import com.bk.sunwidgt.lib.SunCalculator;
@@ -200,6 +202,20 @@ public class SunFragment extends Fragment {
         cal.set(Calendar.DAY_OF_WEEK, Calendar.SATURDAY);
         setTableRow(cal, lat, lng, com.bk.sunwidgt.R.id.sat, defaultSelectedDay);
     }
+    
+    private void addCompassOnClickListener(View view,final int sunriseAz,final int sunsetAz,final int moonriseAz,final int moonsetSz) {
+        view.setOnClickListener(new View.OnClickListener(){
+
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getActivity(),CompassActivity.class);
+                intent.putExtra(CompassFragment.SUNRISE_AZ, sunriseAz);
+                intent.putExtra(CompassFragment.SUNSET_AZ, sunsetAz);
+                intent.putExtra(CompassFragment.MOONRISE_AZ, moonriseAz);
+                intent.putExtra(CompassFragment.MOONSET_AZ, moonsetSz);
+                getActivity().startActivity(intent);
+            }});
+    }
 
     private void setTableRow(Calendar cal, double lat, double lng, int weekid, Calendar selectedDay) {
 
@@ -215,7 +231,7 @@ public class SunFragment extends Fragment {
                 .format(sunanswer.sunrise));
         ((TextView) sunsetRow.findViewById(weekid)).setText(SunWidget.fmtTime
                 .format(sunanswer.sunset));
-
+        
         final MoonCalculator.MoonriseMoonset moonanswer = MoonCalculator.getMoonriseMoonset(cal,
                 lat, lng);
 
@@ -235,6 +251,12 @@ public class SunFragment extends Fragment {
         else {
             ((TextView) moonsetRow.findViewById(weekid)).setText(SunWidget.notimeString);
         }
+        addCompassOnClickListener(sunriseRow.findViewById(weekid),(int)sunanswer.sunrise_azel,(int) sunanswer.sunset_azel,null == moonanswer.moonrise ? CompassFragment.NO_AZ : (int)moonanswer.rise_az,null == moonanswer.moonset ? CompassFragment.NO_AZ : (int) moonanswer.set_sz);
+        addCompassOnClickListener(sunsetRow.findViewById(weekid),(int)sunanswer.sunrise_azel,(int) sunanswer.sunset_azel,null == moonanswer.moonrise ? CompassFragment.NO_AZ : (int)moonanswer.rise_az,null == moonanswer.moonset ? CompassFragment.NO_AZ : (int) moonanswer.set_sz);
+        
+        addCompassOnClickListener(moonriseRow.findViewById(weekid),(int)sunanswer.sunrise_azel,(int) sunanswer.sunset_azel,null == moonanswer.moonrise ? CompassFragment.NO_AZ : (int)moonanswer.rise_az,null == moonanswer.moonset ? CompassFragment.NO_AZ : (int) moonanswer.set_sz);
+        addCompassOnClickListener(moonsetRow.findViewById(weekid),(int)sunanswer.sunrise_azel,(int) sunanswer.sunset_azel,null == moonanswer.moonrise ? CompassFragment.NO_AZ : (int)moonanswer.rise_az,null == moonanswer.moonset ? CompassFragment.NO_AZ : (int) moonanswer.set_sz);
+        
 
         if (cal.equals(selectedDay)) {
             sunriseRow.findViewById(weekid).setBackgroundColor(Color.DKGRAY);
