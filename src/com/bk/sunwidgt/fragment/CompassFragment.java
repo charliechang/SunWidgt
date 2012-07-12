@@ -11,6 +11,7 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Matrix;
 import android.graphics.Paint;
+import android.graphics.PaintFlagsDrawFilter;
 import android.graphics.Path;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
@@ -222,7 +223,8 @@ public class CompassFragment extends Fragment {
 
     private class CompassView extends View {
 
-        private Paint mPaint = new Paint();
+        private Paint mPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+        private PaintFlagsDrawFilter m_setfil = new PaintFlagsDrawFilter(0, Paint.FILTER_BITMAP_FLAG);
         private Path mNorthPath = new Path();
         private Path mSunrisePath = new Path();
         private Path mSunsetPath = new Path();
@@ -241,7 +243,9 @@ public class CompassFragment extends Fragment {
         
         public CompassView(Context context) {
             super(context);
-
+            mPaint.setAntiAlias(true);
+            mPaint.setFilterBitmap(true);
+            
             m_sunriseString = CompassFragment.this.getActivity().getResources().getString(com.bk.sunwidgt.R.string.compass_sunrise);
             m_sunsetString = CompassFragment.this.getActivity().getResources().getString(com.bk.sunwidgt.R.string.compass_sunset);
             m_moonriseString = CompassFragment.this.getActivity().getResources().getString(com.bk.sunwidgt.R.string.compass_moonrise);
@@ -258,6 +262,7 @@ public class CompassFragment extends Fragment {
         @Override
         protected void onDraw(Canvas canvas) {
             //Log.d(TAG, "onDraw");
+            canvas.setDrawFilter(m_setfil);
             canvas.drawColor(Color.BLACK);
             
             if(0 == m_baseHeight) {
@@ -296,8 +301,20 @@ public class CompassFragment extends Fragment {
              final int STEP_AZ = 30;
              for(int i = 0;i < 360 / STEP_AZ;i++) {
                  final String azString = String.valueOf(i * STEP_AZ);
-                 canvas.drawText(azString, 0, -m_baseHeight - mPaint.getTextSize() - ((int) mPaint.measureText(azString) >> 1), mPaint);
+                 canvas.drawText(azString, - ((int) mPaint.measureText(azString) >> 1), -m_baseHeight - mPaint.getTextSize() , mPaint);
                  canvas.rotate(STEP_AZ);
+             }
+
+             for(int i = 0;i < 360;i+=2) {
+                 if(0 == i % 5) {
+                     mPaint.setColor(Color.WHITE);
+                     canvas.drawLine(0, -m_baseHeight- mPaint.getTextSize() / 2, 0, -m_baseHeight + mPaint.getTextSize() , paint);
+                 }
+                 else {
+                     mPaint.setColor(Color.GRAY);
+                     canvas.drawLine(0, -m_baseHeight - mPaint.getTextSize() / 2, 0, -m_baseHeight + mPaint.getTextSize() / 3, paint);
+                 }
+                 canvas.rotate(2);
              }
              mPaint.setColor(Color.GRAY);
              
@@ -309,7 +326,7 @@ public class CompassFragment extends Fragment {
                  paint.setStyle(Paint.Style.STROKE);
                  mPaint.setColor(Color.YELLOW);
                  canvas.rotate(m_sunriseAz);
-                 canvas.drawText(m_sunriseString, 0, -m_baseHeight - mPaint.getTextSize() * 2 - ((int) mPaint.measureText(m_sunriseString) >> 1) , mPaint);
+                 canvas.drawText(m_sunriseString, - ((int) mPaint.measureText(m_sunriseString) >> 1), -m_baseHeight - ((int)mPaint.getTextSize() << 1) , mPaint);
                  canvas.rotate(-m_sunriseAz);
                  drawPath(canvas, mSunrisePath, m_sunriseAz % 360, mPaint);
                  paint.setStyle(Paint.Style.FILL);
@@ -320,7 +337,7 @@ public class CompassFragment extends Fragment {
                  paint.setStyle(Paint.Style.STROKE);
                  mPaint.setColor(Color.RED);
                  canvas.rotate(m_sunsetAz);
-                 canvas.drawText(m_sunsetString, 0, -m_baseHeight - mPaint.getTextSize() * 2 - ((int) mPaint.measureText(m_sunsetString) >> 1) , mPaint);
+                 canvas.drawText(m_sunsetString, - ((int) mPaint.measureText(m_sunsetString) >> 1), -m_baseHeight - ((int) mPaint.getTextSize() << 1)  , mPaint);
                  canvas.rotate(-m_sunsetAz);
                  drawPath(canvas, mSunsetPath, m_sunsetAz % 360, mPaint);
                  paint.setStyle(Paint.Style.FILL);
@@ -330,7 +347,7 @@ public class CompassFragment extends Fragment {
                  paint.setStyle(Paint.Style.STROKE);
                  mPaint.setColor(Color.GREEN);
                  canvas.rotate(m_moonriseAz);
-                 canvas.drawText(m_moonriseString, 0, -m_baseHeight - mPaint.getTextSize() * 2 - ((int) mPaint.measureText(m_moonriseString) >> 1) , mPaint);
+                 canvas.drawText(m_moonriseString,  - ((int) mPaint.measureText(m_moonriseString) >> 1), -m_baseHeight - ((int) mPaint.getTextSize() << 2) , mPaint);
                  canvas.rotate(-m_moonriseAz);
                  drawPath(canvas, mMoonrisePath, m_moonriseAz % 360, mPaint);
                  paint.setStyle(Paint.Style.FILL);
@@ -341,7 +358,7 @@ public class CompassFragment extends Fragment {
                  paint.setStyle(Paint.Style.STROKE);
                  mPaint.setColor(Color.WHITE);
                  canvas.rotate(m_moonsetAz);
-                 canvas.drawText(m_moonsetString, 0, -m_baseHeight - mPaint.getTextSize() * 2 - ((int) mPaint.measureText(m_moonsetString) >> 1) , mPaint);
+                 canvas.drawText(m_moonsetString, - ((int) mPaint.measureText(m_moonsetString) >> 1), -m_baseHeight - ((int) mPaint.getTextSize() << 2)  , mPaint);
                  canvas.rotate(-m_moonsetAz);
                  drawPath(canvas, mMoonsetPath, m_moonsetAz % 360, mPaint);
                  paint.setStyle(Paint.Style.FILL);
